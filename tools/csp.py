@@ -10,7 +10,7 @@ BEACON_POST = "https://cloudflareinsights.com"
 # Google AdSense (ads script, ad frames, ad images and reporting)
 ADS = "https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com"
 PAGES = {
-    "index.html": f"img-src 'self' data: blob: {API} {ADS}; media-src 'self' blob: {API}; connect-src {API} {COUNTER} {BEACON_POST} {ADS}; frame-src {ADS}",
+    "index.html": f"img-src 'self' data: blob: {API} {ADS}; media-src 'self' blob: {API}; connect-src 'self' {API} {COUNTER} {BEACON_POST} {ADS}; frame-src {ADS}",
     "privacy/index.html": "img-src 'self'",
     "stats/index.html": f"img-src 'self' data:; connect-src {COUNTER}",
 }

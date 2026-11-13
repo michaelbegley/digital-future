@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-NKLrXA28f7TXA1G/GJNJACt88g1xCklH0XYHeKQayNs=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-Itk9pJd19JbsyotixJYi/sT9deUSjz0xdqThzUZCudI=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -223,7 +223,6 @@
   <span class="np"><i>&#9835;</i> digifuture.mp3</span>
   <button type="button" id="musictoggle" aria-pressed="true">Music: On</button>
 </div>
-<audio id="music" src="music.mp3" preload="none" loop></audio>
 
 <div class="page">
   <h1 class="logo">DIGITAL FUTURE</h1>
@@ -527,39 +526,63 @@
 
   /* music: starts quietly on the first tap or click (browsers block sound before that),
      fades in, and goes quiet while a video preview plays or a result is on screen.
+     Plays through Web Audio (an 80 s seamless loop), not an <audio> tag, so phones and
+     computers don't show it as "now playing" (no Dynamic Island, lock screen or browser
+     media controls). Stops whenever the tab is hidden, switched away from or closed.
      Turning it off is remembered on this device. */
-  var music = $("music"), mbtn = $("musictoggle"), player = $("player");
-  var musicOn = store.get("df-music") !== "off", started = false, hush = false, fadeT = null;
-  var MUSIC_VOL = 0.35;
-  // phones get it a little quieter. iPhones ignore volume changes from the page, so they get a
-  // pre-quieted file instead (and the fades just switch it on and off there)
-  if (matchMedia("(hover: none) and (pointer: coarse)").matches) {
-    MUSIC_VOL = 0.28;
-    var probe = new Audio(); probe.volume = 0.5;
-    if (probe.volume !== 0.5) music.src = "music_quiet.mp3";
+  var mbtn = $("musictoggle"), player = $("player");
+  var musicOn = store.get("df-music") !== "off", started = false, hush = false;
+  var MUSIC_VOL = matchMedia("(hover: none) and (pointer: coarse)").matches ? 0.28 : 0.35;   // a bit quieter on phones
+  var actx = null, gain = null, buf = null, loading = false, srcNode = null, offT = null;
+  function audioReady() {
+    if (!actx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return false;
+      actx = new AC(); gain = actx.createGain(); gain.gain.value = 0; gain.connect(actx.destination);
+    }
+    if (!buf && !loading) {
+      loading = true;
+      fetch("music_loop.mp3").then(function (r) { return r.arrayBuffer(); })
+        .then(function (data) { return new Promise(function (ok, no) { actx.decodeAudioData(data, ok, no); }); })
+        .then(function (b) { buf = b; musicUpdate(); })
+        .catch(function () { loading = false; });
+    }
+    return !!buf;
   }
-  function fadeTo(target, ms, then) {
-    clearInterval(fadeT);
-    var start = music.volume, t0 = Date.now();
-    fadeT = setInterval(function () {
-      var k = Math.min(1, (Date.now() - t0) / ms);
-      music.volume = Math.max(0, Math.min(1, start + (target - start) * k));
-      if (k >= 1) { clearInterval(fadeT); if (then) then(); }
-    }, 50);
+  function fadeTo(target, ms) {
+    var now = actx.currentTime;
+    gain.gain.cancelScheduledValues(now);
+    gain.gain.setValueAtTime(gain.gain.value, now);
+    gain.gain.linearRampToValueAtTime(target, now + ms / 1000);
   }
   function musicUpdate() {
     mbtn.textContent = musicOn ? "Music: On" : "Music: Off";
     mbtn.setAttribute("aria-pressed", musicOn ? "true" : "false");
-    var shouldPlay = musicOn && started && !hush;
+    var shouldPlay = musicOn && started && !hush && !document.hidden;
+    clearTimeout(offT);
     if (shouldPlay) {
-      if (music.paused) { music.volume = 0; var pr = music.play(); if (pr && pr.catch) pr.catch(function () {}); }
-      fadeTo(MUSIC_VOL, 6000);
       player.classList.add("on");
+      if (!audioReady()) return;                       // starts once the loop has loaded
+      if (actx.state !== "running") actx.resume();
+      if (!srcNode) {
+        srcNode = actx.createBufferSource(); srcNode.buffer = buf; srcNode.loop = true;
+        srcNode.connect(gain); srcNode.start();
+      }
+      fadeTo(MUSIC_VOL, 6000);
     } else {
       player.classList.remove("on");
-      if (!music.paused) fadeTo(0, 800, function () { music.pause(); });
+      if (!actx || actx.state !== "running") return;
+      if (document.hidden) { gain.gain.value = 0; actx.suspend(); return; }   // tab hidden: stop right away
+      fadeTo(0, 800);
+      offT = setTimeout(function () { if (actx) actx.suspend(); }, 850);
     }
   }
+  document.addEventListener("visibilitychange", musicUpdate);
+  // phones only let sound restart from a tap, so coming back to the tab picks up on the next touch
+  document.addEventListener("pointerdown", function () {
+    if (actx && actx.state !== "running" && musicOn && started && !hush) { actx.resume(); musicUpdate(); }
+  }, { passive: true });
+  window.addEventListener("pagehide", function () { if (actx) actx.suspend(); });
   function firstTouch(e) {
     if (started) return;
     if (e && e.target && e.target.closest && e.target.closest("#player")) return;
