@@ -179,6 +179,7 @@
 
   footer { margin-top: 34px; font: 12px var(--serif); color: var(--soft); }
   .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+  @media (max-width: 480px) { .badges { max-width: 184px; margin-left: auto; margin-right: auto; } }   /* 2 x 2 on phones, not 3 + 1 */
   .badge { width: 88px; height: 31px; display: flex; flex-direction: column; justify-content: center; font: 8px/1.15 var(--mono);
            text-transform: uppercase; border: 1px solid; border-color: #fff #404040 #404040 #fff; background: #000; color: var(--green); }
   .badge b { font-size: 10px; color: #fff; }
@@ -309,6 +310,7 @@
       <h2><b id="resn">4.</b> <span id="restitle">Your Clip</span></h2>
       <div id="media"></div>
       <div class="downloads" id="downloads"></div>
+      <p class="hint">Your media is now future-proof.</p>
       <p class="hint">Deleted from the server within an hour. <button class="linkbtn" id="again" type="button">Make another</button></p>
     </section>
   </main>
@@ -318,9 +320,10 @@
       <span class="badge"><b>800 x 600</b>Best viewed at</span>
       <span class="badge"><b>No Flash</b>Required</span>
       <span class="badge"><b>Y2K</b>Compliant</span>
+      <span class="badge"><b>Future-proof</b>Certified</span>
     </div>
     <p id="count" hidden>You are visitor No. <span class="counter" id="countn">000000</span></p>
-    <p>Music from Pixabay.<br>Use your own clips, or ones you have the right to use.<br>Videos are never shared and are deleted within an hour.<br><a href="privacy/">Privacy</a></p>
+    <p>Music from Pixabay.<br>Use your own clips, or ones you have the right to use.<br>Videos are never shared and are deleted within an hour.<br>Future-proof through December 31, 2999.<br><a href="privacy/">Privacy</a></p>
   </footer>
 </div>
 
