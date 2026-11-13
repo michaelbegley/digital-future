@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-KtUrXPIJveahpW5IO+7DinsL4fWGD45lihujx1wDrzw=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-d02FQDmeAtZQXa9w5+gRwWv2d6T6WRYNJVCpG7XY0MI=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -387,6 +387,7 @@
     if (img ? !isImage(f) : !isVideo(f)) { alert(img ? "Not a picture." : "Not a video."); return; }
     if (f.size > (img ? 25e6 : 150e6)) { alert(img ? "Over 25 MB." : "Over 150 MB."); return; }
     file = f;
+    show("status", false);   // an error from the last file shouldn't hang around
     $("drop").style.display = "none"; $("preview").style.display = "block";
     if (img) {
       video.hidden = true; video.removeAttribute("src"); $("pic").hidden = false; $("pic").src = URL.createObjectURL(f);
@@ -405,12 +406,25 @@
   $("drop").addEventListener("drop", function (e) { pick(e.dataTransfer.files[0]); });
   video.addEventListener("error", function () {
     if (!file || mode() === "image") return;
+    var f = file;
+    // the browser can't preview it: still fine for real videos (some phone formats), but check the
+    // file's first bytes so a renamed or empty file is turned away now, not after Generate
+    f.slice(0, 12).arrayBuffer().then(function (b) {
+      var u = new Uint8Array(b), tag = String.fromCharCode.apply(null, u.slice(4, 8));
+      var real = u.length >= 12 && (tag === "ftyp" || tag === "moov" || tag === "mdat" || tag === "wide" || tag === "free" ||
+                 (u[0] === 0x1a && u[1] === 0x45 && u[2] === 0xdf && u[3] === 0xa3));
+      if (file !== f) return;
+      if (!real) { alert("That file isn't a video we can read. Try an MP4, MOV or WebM."); clearFile(); updateTrim(); return; }
+      noPreview();
+    });
+  });
+  function noPreview() {
     duration = 0;
     $("meta").innerHTML = "<span><b>" + (file.size / 1048576).toFixed(1) + " MB</b></span><span>No preview here. It will still work.</span>" +
       "<button class='linkbtn' id='change' type='button'>Choose another</button>";
     $("change").addEventListener("click", function () { $("file").value = ""; $("file").click(); });
     $("start").value = 0; $("end").value = MAX; updateTrim();
-  });
+  }
   video.addEventListener("loadedmetadata", function () {
     duration = video.duration || 0;
     $("start").value = 0; $("end").value = Math.min(MAX, duration).toFixed(1);
@@ -431,7 +445,8 @@
     $("window").style.left = (Math.max(0, s) / d * 100) + "%";
     $("window").style.width = (Math.max(0, Math.min(e, d) - s) / d * 100) + "%";
     var h = $("trimhint");
-    if (!ok && e - s > MAX) { h.textContent = (e - s).toFixed(1) + " seconds. Max is 60."; h.className = "hint warn"; }
+    if (s < 0) { h.textContent = "Start can't be below 0."; h.className = "hint warn"; }
+    else if (!ok && e - s > MAX) { h.textContent = (e - s).toFixed(1) + " seconds. Max is 60."; h.className = "hint warn"; }
     else if (!ok) { h.textContent = "Check start and end."; h.className = "hint warn"; }
     else { h.textContent = (e - s).toFixed(1) + " seconds. About " + Math.max(1, Math.round((e - s) * 6)) + " s to make."; h.className = "hint"; }
     $("go").disabled = !(file && ok);
