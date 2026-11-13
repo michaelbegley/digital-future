@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-kh8PguTKBxRTvWhfOAn79G02YPjT2RjT2c27Y2XomuM=' 'sha256-OHeKP/R561dNhsjA2Wf1x7WUlKH/Wq9EwAMPEzVYRyQ=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-kh8PguTKBxRTvWhfOAn79G02YPjT2RjT2c27Y2XomuM=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -203,8 +203,6 @@
   .oldphone .op-win { position: relative; z-index: 1; transform-origin: 50% 0;
     transition: transform .55s cubic-bezier(.5,0,.75,0), opacity .55s ease-in; }
   .oldphone img { display: block; width: 100%; height: auto; }
-  html.oldphone-on .oldphone.zoom, html.oldphone-on .oldphone.zoom::before { background: transparent; }
-  .oldphone.zoom .op-win { transform: scale(2.6); opacity: 0; }
   /* fake 2000s browser status bar, bottom left of the old desktop window */
   .op-status { position: absolute; left: 0; bottom: 0; display: flex; align-items: center; gap: 4px;
     max-width: 62%; height: 9px; padding: 0 4px 0 3px; background: #ece9d8; border-top: 1px solid #fff;
@@ -649,24 +647,23 @@
 </script>
 <!-- Cloudflare Web Analytics: counts visits for the console, no cookies --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4206345971db487eb9fd93dcda32efc9"}'></script>
 <script>
-  // the old-phone bit: a tap (or 5 seconds) zooms into the real page
+  // the old-phone bit: a tap (or 4.2 seconds) snaps to the real page
   (function () {
     var el = document.getElementById("oldphone"), root = document.documentElement;
     if (!el || !root.classList.contains("oldphone-on")) { if (el) el.remove(); return; }
     var done = false;
     function go() {
       if (done) return; done = true;
-      el.classList.add("zoom");
-      setTimeout(function () { root.classList.remove("oldphone-on", "op-dim"); el.remove(); }, 560);
+      root.classList.remove("oldphone-on", "op-dim"); el.remove();   // snaps straight to the real page, no animation
     }
     el.addEventListener("pointerdown", go);
     setTimeout(function () { if (!done) { el.classList.add("dim"); root.classList.add("op-dim"); } }, 1200);   // white, then very dark gray
-    setTimeout(go, 5000);
+    setTimeout(go, 4200);
     // fake status bar text while "loading"
     var st = document.getElementById("op-status"), tx = document.getElementById("op-text"), bar = document.getElementById("op-bar");
-    var steps = [[0, "Connecting to digitalfuture.technology...", 8], [900, "Waiting for digitalfuture.technology...", 22],
-      [1900, "Transferring data from digitalfuture.technology...", 48], [3000, "Opening page https://digitalfuture.technology/...", 81],
-      [4200, "Done", 100]];
+    var steps = [[0, "Connecting to digitalfuture.technology...", 8], [700, "Waiting for digitalfuture.technology...", 22],
+      [1500, "Transferring data from digitalfuture.technology...", 48], [2500, "Opening page https://digitalfuture.technology/...", 81],
+      [3500, "Done", 100]];
     steps.forEach(function (s) { setTimeout(function () {
       if (done || !tx) return; tx.textContent = s[1]; bar.style.width = s[2] + "%";
       if (s[2] === 100) st.classList.add("done"); }, s[0]); });
