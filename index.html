@@ -3,13 +3,250 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Digital Future</title>
-<meta name="description" content="Upload a short video and get it back rebuilt from falling code, with a retro voice filter.">
+<title>DIGITAL FUTURE</title>
+<meta name="description" content="Upload a short video and get it back in falling code, with a toy voice filter.">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#0f3d1c" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23000'/%3E%3Cpath d='M9 7v18M16 11v14M23 7v12' stroke='%2330d158' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M9 7v18M16 11v14M23 7v12' stroke='%2333ff33' stroke-width='3'/%3E%3C/svg%3E">
 <script src="config.js"></script>
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("df-theme"); } catch (e) {}
+    document.documentElement.dataset.theme = t || "dark";
+  })();
+</script>
+<style>
+  /* Digital Future: a 1999 movie-site layout, our own branding */
+  :root {
+    --page: #000; --text: #fff; --soft: #bdbdbd; --green: #33ff33; --link: #33ff33; --visited: #00c000;
+    --rain: 51,255,51; --rainbg: #000; --inset: #0a0a0a; --edge: #3a3a3a;
+    --serif: "Times New Roman", Times, Georgia, serif;
+    --caps: Copperplate, "Copperplate Gothic Light", "Copperplate Gothic", "Trebuchet MS", Verdana, sans-serif;
+    --mono: "Courier New", Courier, monospace;
+  }
+  [data-theme="light"] {
+    --page: #c0c0c0; --text: #000; --soft: #303030; --green: #006600; --link: #0000ee; --visited: #551a8b;
+    --rain: 0,120,0; --rainbg: #fff; --inset: #fff; --edge: #808080;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--rainbg); color: var(--text); }
+  body { font: 16px/1.35 var(--serif); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+  #rain { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
+  a { color: var(--link); } a:visited { color: var(--visited); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  .page { position: relative; z-index: 1; width: min(620px, 100% - 24px); margin: 0 auto; background: var(--page);
+          padding: 26px 22px 30px; text-align: center; min-height: 100vh; }
+  [data-theme="light"] .page { border-left: 2px solid #fff; border-right: 2px solid #808080; }
+
+  .theme { position: fixed; z-index: 2; top: 8px; right: 8px; font: 11px var(--mono); text-transform: uppercase;
+           background: #c0c0c0; color: #000; padding: 4px 8px; cursor: pointer;
+           border: 2px solid; border-color: #fff #404040 #404040 #fff; }
+  .theme:active { border-color: #404040 #fff #fff #404040; }
+
+  .logo { margin: 4px 0 18px; font: 400 clamp(34px, 9vw, 50px)/1 var(--serif); letter-spacing: .14em; color: var(--green);
+          text-shadow: 0 0 6px rgba(var(--rain), .7); }
+  .logo small { display: block; font: 9px var(--caps); letter-spacing: .5em; color: var(--green); margin-bottom: 4px; }
+
+  .menu { list-style: none; margin: 0; padding: 0; }
+  .menu li { margin: 0 0 12px; }
+  .menu a, .menu a:visited { color: var(--text); text-decoration: none; font: 13px var(--caps); font-variant: small-caps;
+                             letter-spacing: .14em; }
+  .menu a:hover { color: var(--green); }
+
+  .phase { position: relative; height: 46px; margin: 18px 0 6px; font: 700 34px/46px var(--caps); letter-spacing: .08em; color: var(--text); }
+  .phase span { position: absolute; left: 0; right: 0; animation: phase 4s infinite ease-in-out; }
+  .phase span + span { animation-delay: -2s; font-size: 26px; }
+  @keyframes phase { 0%, 35% { opacity: 1; filter: blur(0); } 50%, 85% { opacity: 0; filter: blur(8px); } 100% { opacity: 1; filter: blur(0); } }
+
+  .credits { margin: 0 0 18px; font: 11px/1.25 var(--caps); letter-spacing: .14em; color: var(--green); text-transform: uppercase; }
+
+  .boxes { display: flex; justify-content: center; align-items: center; gap: 14px; margin: 6px 0 18px; }
+  .boxes figure { margin: 0; }
+  .boxes img { display: block; height: 150px; width: auto; border: 1px solid var(--edge); }
+  .boxes figcaption { font: 10px var(--caps); letter-spacing: .2em; color: var(--green); margin-top: 4px; text-transform: uppercase; }
+  .arrow { font: 26px var(--serif); color: var(--green); }
+
+  .marquee { overflow: hidden; white-space: nowrap; font: 15px var(--serif); margin: 4px 0 26px; }
+  .marquee span { display: inline-block; padding-left: 100%; animation: scroll 22s linear infinite; }
+  @keyframes scroll { to { transform: translateX(-100%); } }
+
+  hr { border: 0; border-top: 1px solid var(--edge); margin: 22px 0; }
+  h2 { font: 15px var(--caps); font-variant: small-caps; letter-spacing: .18em; color: var(--text); margin: 0 0 12px; }
+  h2 b { color: var(--green); font-weight: 400; }
+  .hint { font: 13px var(--serif); color: var(--soft); margin: 8px 0 0; }
+  .hint.warn, .error { color: #ff3333 !important; }
+
+  .drop { display: block; margin: 0 auto; max-width: 380px; padding: 22px 12px; cursor: pointer;
+          border: 2px dashed var(--green); color: var(--green); font: 13px var(--caps); letter-spacing: .18em; text-transform: uppercase; }
+  .drop small { display: block; margin-top: 6px; font: 12px var(--serif); letter-spacing: 0; text-transform: none; color: var(--soft); }
+  .drop.over { background: rgba(var(--rain), .12); }
+  .preview { display: none; }
+  .preview video { display: block; margin: 0 auto; max-width: 100%; max-height: 320px; border: 1px solid var(--edge); background: #000; }
+  .meta { margin-top: 8px; font: 13px var(--serif); color: var(--soft); display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .meta b { color: var(--text); font-weight: 400; }
+
+  .trim { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+  .field label { display: block; font: 11px var(--caps); letter-spacing: .14em; text-transform: uppercase; color: var(--soft); margin-bottom: 4px; }
+  .row { display: flex; gap: 6px; align-items: center; justify-content: center; }
+  input[type=number] { width: 84px; font: 15px var(--mono); padding: 3px 5px; background: var(--inset); color: var(--green);
+                       border: 2px solid; border-color: #404040 #fff #fff #404040; border-radius: 0; }
+  [data-theme="dark"] input[type=number] { border-color: #222 #555 #555 #222; }
+  .ghost, .linkbtn { background: none; border: 0; padding: 0; color: var(--link); text-decoration: underline; font: 13px var(--serif); cursor: pointer; }
+  .bar { position: relative; height: 6px; max-width: 380px; margin: 12px auto 0; border: 1px solid var(--edge); }
+  .bar i { position: absolute; top: 0; bottom: 0; background: var(--green); }
+
+  .opts { display: grid; gap: 12px; max-width: 420px; margin: 0 auto; }
+  .opt .name { display: block; font: 12px var(--caps); letter-spacing: .18em; text-transform: uppercase; color: var(--text); }
+  .opt .desc { display: block; font: 12px var(--serif); color: var(--soft); font-style: italic; }
+  .seg { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 3px; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label { font: 15px var(--serif); color: var(--link); text-decoration: underline; cursor: pointer; padding: 2px; }
+  .seg input:checked + label { color: var(--text); text-decoration: none; }
+  .seg input:checked + label::before { content: "["; color: var(--green); margin-right: 3px; }
+  .seg input:checked + label::after { content: "]"; color: var(--green); margin-left: 3px; }
+  .seg input:focus-visible + label { outline: 1px dotted var(--green); }
+  .remember { font: 13px var(--serif); color: var(--soft); }
+  .remember input { accent-color: var(--green); vertical-align: -2px; }
+
+  .go { display: block; margin: 26px auto 0; width: 200px; padding: 10px 0; cursor: pointer; position: relative;
+        background: linear-gradient(#e3b44a, #a8741c); color: #1a1000; font: 700 15px var(--caps); letter-spacing: .2em;
+        border: 0; border-top: 9px solid #111; border-bottom: 9px solid #111;
+        box-shadow: inset 0 0 0 1px #6a4a10; }
+  .go::before, .go::after { content: ""; position: absolute; left: 4px; right: 4px; height: 5px;
+        background: repeating-linear-gradient(90deg, #e9d9a8 0 6px, transparent 6px 12px); }
+  .go::before { top: -7px; } .go::after { bottom: -7px; }
+  .go small { display: block; font: 9px var(--caps); letter-spacing: .3em; margin-top: 2px; }
+  .go:disabled { filter: grayscale(1) brightness(.6); cursor: not-allowed; }
+  .go:not(:disabled):hover { filter: brightness(1.12); }
+
+  .status, .result { display: none; margin-top: 24px; }
+  .status h2 { margin-bottom: 4px; }
+  .progress { max-width: 380px; height: 16px; margin: 10px auto 0; padding: 2px; border: 2px solid; border-color: #404040 #fff #fff #404040; background: var(--inset); }
+  .progress i { display: block; height: 100%; width: 0; background: repeating-linear-gradient(90deg, var(--green) 0 9px, transparent 9px 11px); transition: width .4s; }
+  #media video, #media img { display: block; margin: 0 auto; max-width: 100%; max-height: 70vh; border: 1px solid var(--edge); }
+  .downloads { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+  .dl { font: 16px var(--serif); }
+  .dl small { color: var(--soft); }
+
+  footer { margin-top: 34px; font: 12px var(--serif); color: var(--soft); }
+  .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .badge { width: 88px; height: 31px; display: flex; flex-direction: column; justify-content: center; font: 8px/1.15 var(--mono);
+           text-transform: uppercase; border: 1px solid; border-color: #fff #404040 #404040 #fff; background: #000; color: var(--green); }
+  .badge b { font-size: 10px; color: #fff; }
+  .counter { display: inline-block; font: 15px var(--mono); background: #000; color: #ff3333; padding: 1px 5px; letter-spacing: .12em; border: 1px inset #666; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .phase span, .marquee span { animation: none; }
+    .phase span + span { display: none; }
+    .marquee span { padding-left: 0; white-space: normal; }
+  }
+</style>
+</head>
+<body>
+<canvas id="rain" aria-hidden="true"></canvas>
+<button class="theme" id="theme" type="button" aria-label="Switch between light and dark mode">Light / Dark</button>
+
+<div class="page">
+  <h1 class="logo"><small>The</small>DIGITAL FUTURE</h1>
+
+  <ul class="menu">
+    <li><a href="#s1">Choose a Video</a></li>
+    <li><a href="#s2">Trim</a></li>
+    <li><a href="#s3">Adjust the Look</a></li>
+    <li><a href="#go">Generate</a></li>
+  </ul>
+
+  <div class="phase" aria-label="Free"><span aria-hidden="true">FREE</span><span aria-hidden="true">ONLINE NOW</span></div>
+  <p class="credits">Video to falling code<br>Toy voice filter<br>MP4 &amp; GIF</p>
+
+  <div class="boxes">
+    <figure><img src="before.jpg" alt="A frame from a phone video" width="135" height="240"><figcaption>Before</figcaption></figure>
+    <span class="arrow" aria-hidden="true">&rarr;</span>
+    <figure><img src="after.gif" alt="The same clip in glowing green characters" width="135" height="240"><figcaption>After</figcaption></figure>
+  </div>
+
+  <div class="marquee"><span>Up to 60 seconds. <a href="#s1">Choose a video</a>, pick the look, hit <a href="#go">Generate</a>. Files are deleted within an hour.</span></div>
+
+  <main>
+    <hr>
+    <section aria-labelledby="s1">
+      <h2 id="s1"><b>1.</b> Choose a Video</h2>
+      <label class="drop" id="drop" for="file">Choose a video<small>or drag one here. MP4, MOV, WebM, up to 150 MB</small></label>
+      <input class="sr" type="file" id="file" accept="video/*">
+      <div class="preview" id="preview">
+        <video id="video" controls playsinline preload="metadata"></video>
+        <div class="meta" id="meta"></div>
+      </div>
+    </section>
+
+    <hr>
+    <section aria-labelledby="s2">
+      <h2 id="s2"><b>2.</b> Trim</h2>
+      <div class="trim">
+        <div class="field">
+          <label for="start">Start (sec)</label>
+          <div class="row"><input type="number" id="start" min="0" step="0.1" value="0" inputmode="decimal"><button class="ghost" data-pos="start" type="button">Use current</button></div>
+        </div>
+        <div class="field">
+          <label for="end">End (sec)</label>
+          <div class="row"><input type="number" id="end" min="0" step="0.1" value="60" inputmode="decimal"><button class="ghost" data-pos="end" type="button">Use current</button></div>
+        </div>
+      </div>
+      <div class="bar" aria-hidden="true"><i id="window"></i></div>
+      <p class="hint" id="trimhint">Up to 60 seconds.</p>
+    </section>
+
+    <hr>
+    <section aria-labelledby="s3">
+      <h2 id="s3"><b>3.</b> Adjust the Look</h2>
+      <div class="opts" id="opts">
+        <div class="opt"><span class="name">Output</span><span class="desc">GIFs have no sound</span>
+          <div class="seg" role="radiogroup" aria-label="Output" data-name="output" data-options="mp4:Video,gif:GIF,both:Both"></div></div>
+        <div class="opt"><span class="name">Voice</span>
+          <div class="seg" role="radiogroup" aria-label="Voice" data-name="voice" data-options="toy:Toy,none:Original"></div></div>
+        <div class="opt"><span class="name">Subject</span>
+          <div class="seg" role="radiogroup" aria-label="Subject" data-name="subject" data-options="auto:Auto,person:Person,object:Object"></div></div>
+        <div class="opt"><span class="name">Rain</span>
+          <div class="seg" role="radiogroup" aria-label="Rain" data-name="rain" data-options="light:Light,medium:Medium,heavy:Heavy"></div></div>
+        <div class="opt"><span class="name">Background</span>
+          <div class="seg" role="radiogroup" aria-label="Background" data-name="detail" data-options="minimal:Less,balanced:Some,detailed:More"></div></div>
+        <div class="opt"><span class="name">Size</span>
+          <div class="seg" role="radiogroup" aria-label="Size" data-name="size" data-options="720:720p,480:480p"></div></div>
+        <label class="remember"><input type="checkbox" id="remember"> Remember settings</label>
+      </div>
+    </section>
+
+    <button class="go" id="go" disabled>GENERATE<small>Click here</small></button>
+
+    <section class="status" id="status" aria-live="polite">
+      <h2 id="stage">Uploading</h2>
+      <p class="hint" id="sub">Keep this page open.</p>
+      <div class="progress"><i id="pbar"></i></div>
+      <p class="hint" id="elapsed"></p>
+    </section>
+
+    <section class="result" id="result">
+      <hr>
+      <h2><b>4.</b> Your Clip</h2>
+      <div id="media"></div>
+      <div class="downloads" id="downloads"></div>
+      <p class="hint">Deleted from the server within an hour. <button class="linkbtn" id="again" type="button">Make another</button></p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="badges" aria-hidden="true">
+      <span class="badge"><b>800 x 600</b>Best viewed at</span>
+      <span class="badge"><b>No Flash</b>Required</span>
+      <span class="badge"><b>Y2K</b>Compliant</span>
+    </div>
+    <p id="count" hidden>Clips made: <span class="counter" id="countn">000000</span></p>
+    <p>Use your own clips, or ones you have the right to use.<br>Videos are never shared and are deleted within an hour.</p>
+  </footer>
+</div>
+
 <script>
   // theme before paint: saved choice, else the system setting
   (function () {
@@ -19,234 +256,6 @@
     document.documentElement.dataset.theme = t;
   })();
 </script>
-<style>
-  /* Digital Future: late-90s terminal look (original), dark by default */
-  :root {
-    --bg: #e9efe6; --panel: #f7faf5; --text: #0f3d1c; --muted: #4f6b55; --line: #0f3d1c;
-    --fill: #dfe8da; --fill-strong: #c9d8c2; --seg: #0f3d1c; --seg-text: #f7faf5;
-    --accent: #0a7a2f; --accent-text: #f7faf5; --accent-soft: rgba(10,122,47,.12);
-    --danger: #b3001b; --header: #0f3d1c; --header-text: #d9f7df; --glow: none; --rain: 10,122,47;
-    --mono: "Lucida Console", "Courier New", ui-monospace, Menlo, monospace;
-    --font: var(--mono);
-  }
-  [data-theme="dark"] {
-    --bg: #000; --panel: #020a04; --text: #33ff66; --muted: #1f9d45; --line: #1a7f37;
-    --fill: #031208; --fill-strong: #0b2e15; --seg: #33ff66; --seg-text: #000;
-    --accent: #33ff66; --accent-text: #000; --accent-soft: rgba(51,255,102,.1);
-    --danger: #ff4d4d; --header: #000; --header-text: #33ff66; --glow: 0 0 6px rgba(51,255,102,.55); --rain: 51,255,102;
-  }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 var(--font); -webkit-font-smoothing: antialiased; }
-  [data-theme="dark"] body { text-shadow: var(--glow); }
-  [data-theme="dark"] body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50;
-    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.18) 2px 3px); }
-  button, input, select { font: inherit; color: inherit; }
-  a { color: var(--accent); }
-  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-
-  header { position: sticky; top: 0; z-index: 10; height: 48px; display: flex; align-items: center; justify-content: space-between;
-           padding: 0 max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
-           background: var(--header); color: var(--header-text); border-bottom: 2px solid var(--line); }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 14px; }
-  .brand svg { width: 22px; height: 22px; }
-  .brand small { opacity: .6; letter-spacing: .05em; font-weight: 400; }
-  .theme { height: 32px; border: 2px solid currentColor; background: transparent; color: var(--header-text); cursor: pointer;
-           padding: 0 10px; display: flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
-  .theme:hover { background: var(--header-text); color: var(--header); }
-  .theme svg { width: 14px; height: 14px; }
-  [data-theme="dark"] .sun, [data-theme="light"] .moon { display: none; }
-
-  .hero { position: relative; overflow: hidden; padding: 56px 20px 44px; border-bottom: 2px solid var(--line); }
-  .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: .9; }
-  .hero > div { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
-  .eyebrow { margin: 0 0 14px; font-size: 13px; color: var(--muted); letter-spacing: .1em; }
-  h1 { font-size: clamp(28px, 6vw, 52px); line-height: 1.12; margin: 0 0 16px; font-weight: 700; letter-spacing: -.01em; min-height: 2.3em; }
-  .cursor { display: inline-block; width: .55em; height: 1em; margin-left: 2px; background: currentColor; vertical-align: -0.12em; animation: blink 1s steps(1) infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
-  .lede { color: var(--muted); font-size: 15px; margin: 0; max-width: 600px; background: var(--bg); display: inline; }
-
-  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 56px; }
-  .card { background: var(--panel); border: 2px solid var(--line); margin-bottom: 22px; padding: 0 0 20px; box-shadow: 6px 6px 0 var(--fill-strong); }
-  [data-theme="dark"] .card { box-shadow: 0 0 0 1px #000, 0 0 18px rgba(51,255,102,.08); }
-  .card > *:not(.step) { margin-left: 20px; margin-right: 20px; }
-  @media (max-width: 600px) { .card > *:not(.step) { margin-left: 14px; margin-right: 14px; } }
-  .step { display: flex; align-items: baseline; gap: 10px; margin: 0 0 18px; padding: 8px 14px; background: var(--line); color: var(--panel); text-shadow: none; }
-  [data-theme="dark"] .step { color: #000; background: var(--accent); }
-  .step span { font-size: 12px; opacity: .8; }
-  .step h2 { margin: 0; font-size: 15px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-
-  .drop { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 200px;
-          border: 2px dashed var(--line); cursor: pointer; text-align: center; padding: 24px; transition: background .15s; }
-  .drop:hover, .drop.over { background: var(--accent-soft); }
-  .drop svg { width: 36px; height: 36px; color: var(--accent); }
-  .drop strong { font-size: 16px; letter-spacing: .06em; text-transform: uppercase; }
-  .drop small { color: var(--muted); font-size: 13px; }
-  .preview { display: none; }
-  .preview video { width: 100%; max-height: 60vh; background: #000; display: block; border: 2px solid var(--line); }
-  .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 13px; margin-top: 10px !important; }
-  .meta b { color: var(--text); font-weight: 400; }
-  .linkbtn { border: 0; background: none; color: var(--accent); cursor: pointer; padding: 0; font-size: 13px; text-decoration: underline; }
-
-  .trim { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  @media (max-width: 520px) { .trim { grid-template-columns: 1fr; } }
-  .field label { display: block; font-size: 12px; color: var(--muted); margin: 0 0 6px; letter-spacing: .08em; text-transform: uppercase; }
-  .row { display: flex; gap: 8px; }
-  input[type=number] { width: 100%; min-width: 0; height: 42px; border: 2px solid var(--line); background: var(--fill); padding: 0 12px;
-                       font-variant-numeric: tabular-nums; outline: none; border-radius: 0; }
-  input[type=number]:focus { background: var(--accent-soft); box-shadow: 0 0 0 2px var(--accent); }
-  .ghost { height: 42px; border: 2px solid var(--line); background: var(--panel); color: var(--text); padding: 0 12px; white-space: nowrap;
-           cursor: pointer; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
-  .ghost:hover { background: var(--accent); color: var(--accent-text); text-shadow: none; }
-  .bar { position: relative; height: 10px; border: 2px solid var(--line); background: var(--fill); margin-top: 18px !important; margin-bottom: 8px !important; }
-  .bar i { position: absolute; top: 0; bottom: 0; background: var(--accent); }
-  .hint { color: var(--muted); font-size: 13px; margin: 0; }
-  .hint.warn { color: var(--danger); }
-
-  .opts { display: grid; gap: 20px; }
-  .opt > div:first-child { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; gap: 10px; }
-  .opt .name { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
-  .opt .desc { font-size: 12px; color: var(--muted); text-align: right; }
-  .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 2px solid var(--line); }
-  .seg input { position: absolute; opacity: 0; pointer-events: none; }
-  .seg label { text-align: center; padding: 8px 4px; font-size: 13px; cursor: pointer; user-select: none; white-space: nowrap; border-left: 2px solid var(--line); }
-  .seg label:nth-of-type(1) { border-left: 0; }
-  .seg label:hover { background: var(--accent-soft); }
-  .seg input:checked + label { background: var(--seg); color: var(--seg-text); text-shadow: none; font-weight: 700; }
-  .seg input:checked + label::before { content: "> "; }
-  .seg input:focus-visible + label { outline: 2px dashed var(--accent); outline-offset: -5px; }
-  .remember { display: flex; align-items: center; justify-content: space-between; border-top: 2px dashed var(--line); padding-top: 16px; }
-  .switch { position: relative; width: 56px; height: 28px; flex: none; }
-  .switch input { opacity: 0; width: 0; height: 0; }
-  .switch span { position: absolute; inset: 0; border: 2px solid var(--line); background: var(--fill); cursor: pointer; }
-  .switch span::after { content: "OFF"; position: absolute; inset: 2px 28px 2px 2px; background: var(--line); color: var(--panel);
-                        font-size: 9px; display: grid; place-items: center; transition: inset .15s; text-shadow: none; }
-  .switch input:checked + span::after { content: "ON"; inset: 2px 2px 2px 28px; background: var(--accent); color: var(--accent-text); }
-
-  .go { display: block; width: 100%; height: 58px; border: 2px solid var(--line); background: var(--accent); color: var(--accent-text);
-        font-size: 18px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; cursor: pointer; margin: 4px 0 24px; text-shadow: none;
-        box-shadow: 6px 6px 0 var(--fill-strong); }
-  [data-theme="dark"] .go { box-shadow: 0 0 22px rgba(51,255,102,.35); }
-  .go:hover:not(:disabled) { filter: brightness(1.1); }
-  .go:active:not(:disabled) { transform: translate(2px, 2px); }
-  .go:disabled { opacity: .35; cursor: default; }
-
-  .status { display: none; }
-  .status h2 { font-size: 18px; margin: 0 0 4px; letter-spacing: .06em; text-transform: uppercase; }
-  .status h2::after { content: ""; display: inline-block; width: .5em; height: 1em; margin-left: 6px; background: currentColor; vertical-align: -0.12em; animation: blink 1s steps(1) infinite; }
-  .status h2.error::after { display: none; }
-  .progress { height: 18px; border: 2px solid var(--line); background: var(--fill); overflow: hidden; margin-top: 14px !important; margin-bottom: 8px !important; }
-  .progress i { display: block; height: 100%; width: 0; transition: width .4s steps(20);
-                background: repeating-linear-gradient(90deg, var(--accent) 0 10px, transparent 10px 13px); }
-  .result { display: none; }
-  .result video, .result img { width: 100%; background: #000; display: block; border: 2px solid var(--line); }
-  .downloads { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px !important; }
-  .dl { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border: 2px solid var(--line); background: var(--accent);
-        color: var(--accent-text); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; text-shadow: none; }
-  .dl.alt { background: var(--panel); color: var(--text); }
-  .dl small { opacity: .75; font-weight: 400; text-transform: none; }
-  .error { color: var(--danger); }
-
-  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 22px 20px calc(36px + env(safe-area-inset-bottom)); border-top: 2px solid var(--line); }
-  footer p { margin: 4px auto; max-width: 600px; }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
-</style>
-</head>
-<body>
-<header>
-  <div class="brand">
-    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="none" stroke="currentColor" stroke-width="3"/><path d="M9 7v18M16 11v14M23 7v12" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>
-    Digital Future <small>v1.0</small>
-  </div>
-  <button class="theme" id="theme" aria-label="Switch between light and dark mode">
-    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></svg>
-    <svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>
-    <span class="sun">Light</span><span class="moon">Dark</span>
-  </button>
-</header>
-
-<section class="hero">
-  <canvas id="rain" aria-hidden="true"></canvas>
-  <div>
-    <p class="eyebrow">C:\DIGITAL_FUTURE&gt; run.exe</p>
-    <h1 aria-label="Rebuild any clip in falling code."><span id="typed"></span><span class="cursor" aria-hidden="true"></span></h1>
-    <p class="lede">Upload a short video. The subject comes back made of glowing characters, the scene is traced in light, and the voice runs through a retro filter.</p>
-  </div>
-</section>
-
-<main>
-  <section class="card" aria-labelledby="s1">
-    <div class="step"><span>01</span><h2 id="s1">Choose a video</h2></div>
-    <label class="drop" id="drop" for="file">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-      <strong>Tap to choose a video</strong>
-      <small>or drag one here · MP4, MOV, WebM · up to 150 MB</small>
-    </label>
-    <input class="sr" type="file" id="file" accept="video/*">
-    <div class="preview" id="preview">
-      <video id="video" controls playsinline preload="metadata"></video>
-      <div class="meta" id="meta"></div>
-    </div>
-  </section>
-
-  <section class="card" aria-labelledby="s2">
-    <div class="step"><span>02</span><h2 id="s2">Pick up to 60 seconds</h2></div>
-    <div class="trim">
-      <div class="field">
-        <label for="start">Start (seconds)</label>
-        <div class="row"><input type="number" id="start" min="0" step="0.1" value="0" inputmode="decimal"><button class="ghost" data-pos="start" type="button">Current position</button></div>
-      </div>
-      <div class="field">
-        <label for="end">End (seconds)</label>
-        <div class="row"><input type="number" id="end" min="0" step="0.1" value="60" inputmode="decimal"><button class="ghost" data-pos="end" type="button">Current position</button></div>
-      </div>
-    </div>
-    <div class="bar" aria-hidden="true"><i id="window"></i></div>
-    <p class="hint" id="trimhint">Keeps your video's shape and smoothness, up to 24 frames per second.</p>
-  </section>
-
-  <section class="card" aria-labelledby="s3">
-    <div class="step"><span>03</span><h2 id="s3">Adjust the look</h2></div>
-    <div class="opts" id="opts">
-      <div class="opt"><div><span class="name">Output</span><span class="desc">GIFs have no sound</span></div>
-        <div class="seg" role="radiogroup" data-name="output" data-options="mp4:Video,gif:GIF,both:Both"></div></div>
-      <div class="opt"><div><span class="name">Voice</span><span class="desc">Retro toy speaker</span></div>
-        <div class="seg" role="radiogroup" data-name="voice" data-options="toy:Filtered,none:Original"></div></div>
-      <div class="opt"><div><span class="name">Subject</span><span class="desc">What to rebuild in detail</span></div>
-        <div class="seg" role="radiogroup" data-name="subject" data-options="auto:Auto,person:Person,object:Object"></div></div>
-      <div class="opt"><div><span class="name">Rain</span><span class="desc">Falling code density</span></div>
-        <div class="seg" role="radiogroup" data-name="rain" data-options="light:Light,medium:Medium,heavy:Heavy"></div></div>
-      <div class="opt"><div><span class="name">Scene</span><span class="desc">How much of the background is traced</span></div>
-        <div class="seg" role="radiogroup" data-name="detail" data-options="minimal:Minimal,balanced:Balanced,detailed:Detailed"></div></div>
-      <div class="opt"><div><span class="name">Size</span><span class="desc">Smaller loads faster</span></div>
-        <div class="seg" role="radiogroup" data-name="size" data-options="720:720p,480:480p"></div></div>
-      <div class="remember"><span class="name">Remember settings</span>
-        <label class="switch"><input type="checkbox" id="remember"><span></span><b class="sr">Remember settings</b></label></div>
-    </div>
-  </section>
-
-  <button class="go" id="go" disabled>Generate</button>
-
-  <section class="card status" id="status" aria-live="polite">
-    <h2 id="stage">Uploading</h2>
-    <p class="hint" id="sub">Keep this page open.</p>
-    <div class="progress"><i id="pbar"></i></div>
-    <p class="hint" id="elapsed"></p>
-  </section>
-
-  <section class="card result" id="result">
-    <div class="step"><span>04</span><h2>Your clip</h2></div>
-    <div id="media"></div>
-    <div class="downloads" id="downloads"></div>
-    <p class="hint" style="margin-top:14px">Files are deleted from our server within an hour. <button class="linkbtn" id="again" type="button">Make another</button></p>
-  </section>
-</main>
-
-<footer>
-  <p>Digital Future · Use your own clips or ones you have the right to use.</p>
-  <p>Your video is processed on our server, never shared, and deleted within an hour.</p>
-</footer>
-
 <script>
 (function () {
   "use strict";
@@ -289,8 +298,8 @@
   var file = null, duration = 0, video = $("video");
   function pick(f) {
     if (!f) return;
-    if (!/^video\//.test(f.type) && !/\.(mp4|mov|webm|m4v|mkv)$/i.test(f.name)) { alert("Please choose a video file."); return; }
-    if (f.size > 150e6) { alert("That video is over 150 MB."); return; }
+    if (!/^video\//.test(f.type) && !/\.(mp4|mov|webm|m4v|mkv)$/i.test(f.name)) { alert("Not a video."); return; }
+    if (f.size > 150e6) { alert("Over 150 MB."); return; }
     file = f;
     video.src = URL.createObjectURL(f);
     $("drop").style.display = "none"; $("preview").style.display = "block";
@@ -302,7 +311,7 @@
   video.addEventListener("error", function () {
     if (!file) return;
     duration = 0;
-    $("meta").innerHTML = "<span><b>" + (file.size / 1048576).toFixed(1) + " MB</b></span><span>Preview not available in this browser — it will still work.</span>" +
+    $("meta").innerHTML = "<span><b>" + (file.size / 1048576).toFixed(1) + " MB</b></span><span>No preview here. It will still work.</span>" +
       "<button class='linkbtn' id='change' type='button'>Choose another</button>";
     $("change").addEventListener("click", function () { $("file").value = ""; $("file").click(); });
     $("start").value = 0; $("end").value = MAX; updateTrim();
@@ -311,7 +320,7 @@
     duration = video.duration || 0;
     $("start").value = 0; $("end").value = Math.min(MAX, duration).toFixed(1);
     var mb = (file.size / 1048576).toFixed(1);
-    var dims = video.videoWidth ? "<span><b>" + video.videoWidth + "×" + video.videoHeight + "</b></span>" : "<span>Preview not available in this browser — it will still work.</span>";
+    var dims = video.videoWidth ? "<span><b>" + video.videoWidth + "×" + video.videoHeight + "</b></span>" : "<span>No preview here. It will still work.</span>";
     $("meta").innerHTML = "<span><b>" + mb + " MB</b></span>" + dims + "<span><b>" + duration.toFixed(1) +
       " s</b></span><button class='linkbtn' id='change' type='button'>Choose another</button>";
     $("change").addEventListener("click", function () { $("file").value = ""; $("file").click(); });
@@ -325,9 +334,9 @@
     $("window").style.left = (Math.max(0, s) / d * 100) + "%";
     $("window").style.width = (Math.max(0, Math.min(e, d) - s) / d * 100) + "%";
     var h = $("trimhint");
-    if (!ok && e - s > MAX) { h.textContent = "That's " + (e - s).toFixed(1) + " seconds. The limit is 60."; h.className = "hint warn"; }
-    else if (!ok) { h.textContent = "End needs to be after start, within the video."; h.className = "hint warn"; }
-    else { h.textContent = (e - s).toFixed(1) + " seconds · about " + Math.max(1, Math.round((e - s) * 6)) + " s to make"; h.className = "hint"; }
+    if (!ok && e - s > MAX) { h.textContent = (e - s).toFixed(1) + " seconds. Max is 60."; h.className = "hint warn"; }
+    else if (!ok) { h.textContent = "Check start and end."; h.className = "hint warn"; }
+    else { h.textContent = (e - s).toFixed(1) + " seconds. About " + Math.max(1, Math.round((e - s) * 6)) + " s to make."; h.className = "hint"; }
     $("go").disabled = !(file && ok);
     return ok;
   }
@@ -349,7 +358,7 @@
     $("stage").textContent = title; $("sub").textContent = sub || ""; $("pbar").style.width = Math.round(p * 100) + "%";
   }
   function tick() { var s = Math.round((Date.now() - t0) / 1000); $("elapsed").textContent = "Elapsed " + Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }
-  function fail(msg) { setStage("Something went wrong", msg, 0); $("stage").classList.add("error"); clearInterval(timer); $("go").disabled = false; }
+  function fail(msg) { setStage("Error", msg, 0); $("stage").classList.add("error"); clearInterval(timer); $("go").disabled = false; }
 
   $("go").addEventListener("click", function () {
     if (!updateTrim()) return;
@@ -366,18 +375,18 @@
     xhr.upload.onprogress = function (e) { if (e.lengthComputable) setStage("Uploading", Math.round(e.loaded / e.total * 100) + "%", e.loaded / e.total * 0.05); };
     xhr.onload = function () {
       var r = {}; try { r = JSON.parse(xhr.responseText); } catch (e) {}
-      if (xhr.status !== 200) return fail(r.detail || "The server didn't accept the upload.");
+      if (xhr.status !== 200) return fail(r.detail || "Upload failed.");
       poll(r.id);
     };
-    xhr.onerror = function () { fail("Couldn't reach the server. Check your connection and try again."); };
+    xhr.onerror = function () { fail("Can't reach the server."); };
     xhr.send(fd);
   });
 
   function poll(id) {
     fetch(API + "/api/jobs/" + id).then(function (r) { return r.json().then(function (j) { return [r.ok, j]; }); }).then(function (x) {
       var ok = x[0], j = x[1];
-      if (!ok) return fail(j.detail || "Lost track of that job.");
-      if (j.status === "queued") setStage("Waiting in line", j.ahead === 1 ? "1 clip ahead of yours" : j.ahead + " clips ahead of yours", 0.05);
+      if (!ok) return fail(j.detail || "Job not found.");
+      if (j.status === "queued") setStage("Waiting in line", j.ahead === 1 ? "1 ahead of you" : j.ahead + " ahead of you", 0.05);
       else if (j.status === "running") setStage(j.stage, Math.round(j.progress * 100) + "%", 0.05 + j.progress * 0.95);
       if (j.status === "error") return fail(j.error || "Rendering failed.");
       if (j.status === "done") return done(j);
@@ -395,7 +404,7 @@
     else if (gif) { var im = document.createElement("img"); im.src = API + gif.url; im.alt = "Your generated GIF"; media.appendChild(im); }
     j.files.forEach(function (f, i) {
       var a = document.createElement("a"); a.href = API + f.url; a.download = f.name; a.className = "dl" + (i ? " alt" : "");
-      a.innerHTML = "Download " + (/\.gif$/.test(f.name) ? "GIF" : "video") + " <small>" + f.mb + " MB</small>";
+      a.innerHTML = "Download " + (/\.gif$/.test(f.name) ? "GIF" : "video") + " <small>(" + f.mb + " MB)</small>";
       dls.appendChild(a);
     });
     show("result", true); $("go").disabled = false;
@@ -403,44 +412,40 @@
   }
   $("again").addEventListener("click", function () { show("result", false); window.scrollTo({ top: 0, behavior: "smooth" }); });
 
-  /* typed headline */
-  (function () {
-    var text = "Rebuild any clip in falling code.", el = $("typed"), i = 0;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = text; return; }
-    setTimeout(function step() { el.textContent = text.slice(0, ++i); if (i < text.length) setTimeout(step, 55 + Math.random() * 60); }, 700);
-  })();
+  /* clips-made counter */
+  if (API) fetch(API + "/api/stats").then(function (r) { return r.json(); }).then(function (s) {
+    if (typeof s.jobs_total === "number" && s.jobs_total > 0) { $("countn").textContent = String(s.jobs_total).padStart(6, "0"); $("count").hidden = false; }
+  }).catch(function () {});
 
-  /* hero rain (decorative, pauses off-screen and for reduced motion) */
-  var c = $("rain"), ctx = c.getContext("2d"), cols = [], fs = 15, raf = 0, visible = true, cssH = 0;
-  var chars = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789=+*<>";
+  /* background rain: drawn here, dense, pauses when hidden or for reduced motion */
+  var c = $("rain"), ctx = c.getContext("2d"), cols = [], fs = 16, W = 0, H = 0, rgb = "", bg = "";
+  var chars = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789:=+*<>|";
+  function readColors() { var cs = getComputedStyle(document.documentElement); rgb = cs.getPropertyValue("--rain").trim(); bg = cs.getPropertyValue("--rainbg").trim(); }
   function size() {
-    var r = c.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); cssH = r.height;
-    c.width = r.width * dpr; c.height = r.height * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cols = []; for (var i = 0; i < Math.ceil(r.width / fs); i++) cols.push({ y: Math.random() * -40, v: 0.12 + Math.random() * 0.2 });
+    var dpr = Math.min(2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight;
+    c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cols = []; for (var i = 0; i < Math.ceil(W / fs); i++) cols.push({ y: Math.random() * H / fs, v: 0.15 + Math.random() * 0.35, n: 12 + (Math.random() * 22 | 0), s: Math.random() * 999 | 0 });
   }
-  function draw() {
-    var w = c.width, h = c.height, rgb = rainRGB;
-    ctx.clearRect(0, 0, w, h); ctx.font = fs + "px ui-monospace, Menlo, monospace";
+  function frame() {
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H); ctx.font = fs + "px monospace";
     for (var i = 0; i < cols.length; i++) {
-      var col = cols[i]; col.y += col.v;
-      for (var k = 0; k < 14; k++) {
-        var y = (Math.floor(col.y) - k) * fs; if (y < -fs || y > h) continue;
-        var a = k === 0 ? 0.5 : 0.22 * (1 - k / 14);
-        ctx.fillStyle = "rgba(" + rgb + "," + a + ")";
-        ctx.fillText(chars[(i * 7 + Math.floor(col.y) - k) % chars.length], i * fs, y);
+      var col = cols[i], head = Math.floor(col.y);
+      for (var k = 0; k < col.n; k++) {
+        var y = (head - k) * fs; if (y < -fs || y > H) continue;
+        var ch = chars[(col.s + (head - k) * 7 + (k === 0 ? (Date.now() / 90 | 0) : 0)) % chars.length];
+        ctx.fillStyle = k === 0 ? "rgba(220,255,220,.9)" : "rgba(" + rgb + "," + (0.85 * (1 - k / col.n)).toFixed(3) + ")";
+        ctx.fillText(ch, i * fs, y);
       }
-      if ((col.y - 14) * fs > cssH) col.y = Math.random() * -20;
+      if ((head - col.n) * fs > H) { col.y = -Math.random() * 12; col.n = 12 + (Math.random() * 22 | 0); col.v = 0.15 + Math.random() * 0.35; }
     }
-    if (visible) raf = requestAnimationFrame(draw);
   }
-  var rainRGB = "";
-  function readRain() { rainRGB = getComputedStyle(document.documentElement).getPropertyValue("--rain").trim(); }
-  readRain();
-  new MutationObserver(readRain).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    size(); addEventListener("resize", size); draw();
-    new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) { cancelAnimationFrame(raf); draw(); } }).observe(c);
-  }
+  var raf = 0, still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function loop() { for (var i = 0; i < cols.length; i++) cols[i].y += cols[i].v; frame(); raf = requestAnimationFrame(loop); }
+  readColors(); size();
+  new MutationObserver(function () { readColors(); if (still) frame(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  addEventListener("resize", function () { size(); if (still) frame(); });
+  if (still) frame(); else loop();
+  document.addEventListener("visibilitychange", function () { if (still) return; cancelAnimationFrame(raf); if (!document.hidden) loop(); });
 })();
 </script>
 </body>
