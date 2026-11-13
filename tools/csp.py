@@ -7,8 +7,11 @@ API = "https://michbegl-digital-future.hf.space"
 COUNTER = "https://cpzhsztczixiidxypvmb.supabase.co"
 BEACON_JS = "https://static.cloudflareinsights.com"   # Cloudflare Web Analytics (console Sites board)
 BEACON_POST = "https://cloudflareinsights.com"
+# Google AdSense (ads script, ad frames, ad images and reporting)
+ADS = "https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com"
 PAGES = {
-    "index.html": f"img-src 'self' data: blob: {API}; media-src 'self' blob: {API}; connect-src {API} {COUNTER} {BEACON_POST}",
+    "index.html": f"img-src 'self' data: blob: {API} {ADS}; media-src 'self' blob: {API}; connect-src {API} {COUNTER} {BEACON_POST} {ADS}; frame-src {ADS}",
+    "privacy/index.html": "img-src 'self'",
     "stats/index.html": f"img-src 'self' data:; connect-src {COUNTER}",
 }
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,6 +24,8 @@ for page, extra in PAGES.items():
     hashes = " ".join("'sha256-" + base64.b64encode(hashlib.sha256(m.encode()).digest()).decode() + "'"
                       for m in re.findall(r"<script>(.*?)</script>", s, re.S))
     beacon = f" {BEACON_JS}" if BEACON_JS in s else ""
+    if "adsbygoogle.js" in s:
+        beacon += " " + ADS
     policy = (f"default-src 'none'; script-src 'self' {hashes}{beacon}; style-src 'self' 'unsafe-inline'; {extra}; "
               "base-uri 'none'; form-action 'none'; object-src 'none'")
     tags = f'<meta http-equiv="Content-Security-Policy" content="{policy}">\n<meta name="referrer" content="strict-origin-when-cross-origin">'
