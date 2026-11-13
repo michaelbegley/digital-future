@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-kh8PguTKBxRTvWhfOAn79G02YPjT2RjT2c27Y2XomuM=' 'sha256-Qxi0URuF4KisirtZnKe8twtjCdTDsA+N5Srq9+nz75g=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-kh8PguTKBxRTvWhfOAn79G02YPjT2RjT2c27Y2XomuM=' 'sha256-42wC1qUSfZMopfJLjHJspdXpGAgEvkWJ2juw36AE9pY=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -184,15 +184,16 @@
   .oldphone { display: none; }
   html.oldphone-on, html.oldphone-on body { overflow: hidden; }
   html.oldphone-on .oldphone { display: block; position: fixed; inset: 0; z-index: 9999; background: #fff; cursor: pointer;
-    transition: background-color .45s ease-in; }
+    transition: background-color .8s ease-in; }
+  html.oldphone-on .oldphone.dim { background-color: #161616; }
   .oldphone img { display: block; width: 100%; height: auto; transform-origin: 50% 0;
     transition: transform .55s cubic-bezier(.5,0,.75,0), opacity .55s ease-in; }
-  .oldphone.zoom { background-color: rgba(255,255,255,0); }
+  html.oldphone-on .oldphone.zoom { background-color: rgba(22,22,22,0); }
   .oldphone.zoom img { transform: scale(2.6); opacity: 0; }
 </style>
 </head>
 <body>
-<div class="oldphone" id="oldphone" aria-hidden="true"><img src="oldphone.jpg" alt="" width="980" height="1300"></div>
+<div class="oldphone" id="oldphone" aria-hidden="true"><img src="oldphone.jpg" alt="" width="1280" height="800"></div>
 <canvas id="rain" aria-hidden="true"></canvas>
 <button class="theme" id="theme" type="button" aria-label="Switch between light and dark mode">Light / Dark</button>
 <div class="player" id="player" role="group" aria-label="Music">
@@ -635,6 +636,7 @@
       setTimeout(function () { root.classList.remove("oldphone-on"); el.remove(); }, 560);
     }
     el.addEventListener("pointerdown", go);
+    setTimeout(function () { if (!done) el.classList.add("dim"); }, 1200);   // white, then very dark gray
     setTimeout(go, 5000);
   })();
 </script>
