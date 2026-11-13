@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-5hfyR4cn+rsi8ddn7O3D7GXjhedZgq+25wVy4ABJUEg='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://cpzhsztczixiidxypvmb.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-AaV4OLQ1PxBY+2v8wl/tWre0Fqj0k3uI002LaRZp1G4='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://cpzhsztczixiidxypvmb.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -34,6 +34,10 @@
     <div><b id="today">0</b><span>Today</span></div>
     <div><b id="all">0</b><span>All time</span></div>
   </div>
+  <div class="tiles">
+    <div><b id="vids">0</b><span>Videos encoded</span></div>
+    <div><b id="pics">0</b><span>Pictures encoded</span></div>
+  </div>
   <h2>Where from, last 30 days</h2>
   <ul id="from"></ul>
   <h2>Last 30 days</h2>
@@ -59,7 +63,7 @@
     fetch(STATS, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: "{}" })
       .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.message || r.status); return d; }); })
       .then(function (d) {
-        $("now").textContent = num(d.last_30_min); $("today").textContent = num(d.today); $("all").textContent = num(d.all_time);
+        $("now").textContent = num(d.last_30_min); $("today").textContent = num(d.today); $("all").textContent = num(d.all_time); $("vids").textContent = num(d.videos || 0); $("pics").textContent = num(d.pictures || 0);
         var src = d.sources || [], top = Math.max.apply(null, [1].concat(src.map(function (x) { return x.visits; })));
         $("from").replaceChildren.apply($("from"), src.map(function (x) { return row(NAMES[x.src] || x.src, x.visits, top); }));
         var days = d.days || [], most = Math.max.apply(null, [1].concat(days.map(function (x) { return x.visits; })));
