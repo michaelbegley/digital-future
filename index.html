@@ -82,6 +82,10 @@
   .drop small { display: block; margin-top: 6px; font: 12px var(--serif); letter-spacing: 0; text-transform: none; color: var(--soft); }
   .drop.over { background: rgba(var(--rain), .12); }
   .preview { display: none; }
+  .preview img { display: block; margin: 0 auto; max-width: 100%; max-height: 320px; border: 1px solid var(--edge); }
+  .modeseg { margin-bottom: 14px; }
+  .modeseg label { font-size: 17px; }
+  [data-mode="image"] .vidonly, [data-mode="image"] #trimsec, [data-mode="image"] #trimsec + hr { display: none; }
   .preview video { display: block; margin: 0 auto; max-width: 100%; max-height: 320px; border: 1px solid var(--edge); background: #000; }
   .meta { margin-top: 8px; font: 13px var(--serif); color: var(--soft); display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .meta b { color: var(--text); font-weight: 400; }
@@ -151,14 +155,14 @@
   <h1 class="logo">DIGITAL FUTURE</h1>
 
   <ul class="menu">
-    <li><a href="#s1">Choose a Video</a></li>
+    <li><a href="#s1">Choose a File</a></li>
     <li><a href="#s2">Trim</a></li>
     <li><a href="#s3">Adjust the Look</a></li>
     <li><a href="#go">Generate</a></li>
   </ul>
 
   <div class="phase" aria-label="Free"><span aria-hidden="true">FREE</span><span aria-hidden="true">ONLINE NOW</span></div>
-  <p class="credits">Video to falling code<br>Toy voice filter<br>MP4 &amp; GIF</p>
+  <p class="credits">Videos &amp; pictures to falling code<br>Toy voice filter<br>MP4, PNG &amp; GIF</p>
 
   <div class="boxes">
     <figure><img src="before.jpg" alt="A frame from a phone video" width="135" height="240"><figcaption>Before</figcaption></figure>
@@ -166,22 +170,24 @@
     <figure><img src="after.gif" alt="The same clip in glowing green characters" width="135" height="240"><figcaption>After</figcaption></figure>
   </div>
 
-  <div class="marquee"><span>Up to 60 seconds. <a href="#s1">Choose a video</a>, pick the look, hit <a href="#go">Generate</a>. Files are deleted within an hour.</span></div>
+  <div class="marquee"><span>Videos up to 60 seconds, or any picture. <a href="#s1">Choose a file</a>, pick the look, hit <a href="#go">Generate</a>. Files are deleted within an hour.</span></div>
 
   <main>
     <hr>
     <section aria-labelledby="s1">
-      <h2 id="s1"><b>1.</b> Choose a Video</h2>
-      <label class="drop" id="drop" for="file">Choose a video<small>or drag one here. MP4, MOV, WebM, up to 150 MB</small></label>
+      <h2 id="s1"><b>1.</b> Choose a File</h2>
+      <div class="seg modeseg" role="radiogroup" aria-label="Video or picture" data-name="mode" data-options="video:Video,image:Picture"></div>
+      <label class="drop" id="drop" for="file"><span id="droptitle">Choose a video</span><small id="dropnote">or drag one here. MP4, MOV, WebM, up to 150 MB</small></label>
       <input class="sr" type="file" id="file" accept="video/*">
       <div class="preview" id="preview">
         <video id="video" controls playsinline preload="metadata"></video>
+        <img id="pic" alt="Your picture" hidden>
         <div class="meta" id="meta"></div>
       </div>
     </section>
 
     <hr>
-    <section aria-labelledby="s2">
+    <section aria-labelledby="s2" id="trimsec">
       <h2 id="s2"><b>2.</b> Trim</h2>
       <div class="trim">
         <div class="field">
@@ -199,11 +205,11 @@
 
     <hr>
     <section aria-labelledby="s3">
-      <h2 id="s3"><b>3.</b> Adjust the Look</h2>
+      <h2 id="s3"><b id="lookn">3.</b> Adjust the Look</h2>
       <div class="opts" id="opts">
-        <div class="opt"><span class="name">Output</span><span class="desc">GIFs have no sound</span>
+        <div class="opt vidonly"><span class="name">Output</span><span class="desc">GIFs have no sound</span>
           <div class="seg" role="radiogroup" aria-label="Output" data-name="output" data-options="mp4:Video,gif:GIF,both:Both"></div></div>
-        <div class="opt"><span class="name">Voice</span>
+        <div class="opt vidonly"><span class="name">Voice</span>
           <div class="seg" role="radiogroup" aria-label="Voice" data-name="voice" data-options="toy:Toy,none:Original"></div></div>
         <div class="opt"><span class="name">Subject</span>
           <div class="seg" role="radiogroup" aria-label="Subject" data-name="subject" data-options="auto:Auto,person:Person,object:Object"></div></div>
@@ -211,7 +217,7 @@
           <div class="seg" role="radiogroup" aria-label="Rain" data-name="rain" data-options="light:Light,medium:Medium,heavy:Heavy"></div></div>
         <div class="opt"><span class="name">Background</span>
           <div class="seg" role="radiogroup" aria-label="Background" data-name="detail" data-options="minimal:Less,balanced:Some,detailed:More"></div></div>
-        <div class="opt"><span class="name">Size</span>
+        <div class="opt vidonly"><span class="name">Size</span>
           <div class="seg" role="radiogroup" aria-label="Size" data-name="size" data-options="720:720p,480:480p"></div></div>
         <label class="remember"><input type="checkbox" id="remember"> Remember settings</label>
       </div>
@@ -228,7 +234,7 @@
 
     <section class="result" id="result">
       <hr>
-      <h2><b>4.</b> Your Clip</h2>
+      <h2><b id="resn">4.</b> <span id="restitle">Your Clip</span></h2>
       <div id="media"></div>
       <div class="downloads" id="downloads"></div>
       <p class="hint">Deleted from the server within an hour. <button class="linkbtn" id="again" type="button">Make another</button></p>
@@ -260,7 +266,7 @@
   "use strict";
   var API = (window.DF_API || "").replace(/\/$/, "");
   var MAX = 60, $ = function (id) { return document.getElementById(id); };
-  var DEFAULTS = { output: "mp4", voice: "toy", subject: "auto", rain: "medium", detail: "balanced", size: "720" };
+  var DEFAULTS = { mode: "video", output: "mp4", voice: "toy", subject: "auto", rain: "medium", detail: "balanced", size: "720" };
   var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
                 set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
                 del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
@@ -285,6 +291,7 @@
     });
   });
   $("remember").checked = !!saved;
+  document.body.dataset.mode = (saved && saved.mode) || "video";
   function options() {
     var o = {};
     Object.keys(DEFAULTS).forEach(function (k) { o[k] = document.querySelector('input[name="' + k + '"]:checked').value; });
@@ -295,20 +302,48 @@
 
   /* file + preview */
   var file = null, duration = 0, video = $("video");
+  function mode() { return document.querySelector('input[name="mode"]:checked').value; }
+  function setMode() {
+    var m = mode(), img = m === "image";
+    document.body.dataset.mode = m;
+    $("file").accept = img ? "image/*" : "video/*";
+    $("droptitle").textContent = img ? "Choose a picture" : "Choose a video";
+    $("dropnote").textContent = img ? "or drag one here. JPG, PNG, WebP, up to 25 MB" : "or drag one here. MP4, MOV, WebM, up to 150 MB";
+    $("lookn").textContent = img ? "2." : "3."; $("resn").textContent = img ? "3." : "4.";
+    $("restitle").textContent = img ? "Your Picture" : "Your Clip";
+    if (file && (img ? !isImage(file) : !isVideo(file))) clearFile();
+    updateTrim();
+  }
+  function isVideo(f) { return /^video\//.test(f.type) || /\.(mp4|mov|webm|m4v|mkv)$/i.test(f.name); }
+  function isImage(f) { return /^image\//.test(f.type) || /\.(jpe?g|png|webp|bmp|gif|tiff?|heic)$/i.test(f.name); }
+  function clearFile() {
+    file = null; $("file").value = ""; video.removeAttribute("src"); $("pic").hidden = true; video.hidden = false;
+    $("drop").style.display = ""; $("preview").style.display = "none";
+  }
   function pick(f) {
     if (!f) return;
-    if (!/^video\//.test(f.type) && !/\.(mp4|mov|webm|m4v|mkv)$/i.test(f.name)) { alert("Not a video."); return; }
-    if (f.size > 150e6) { alert("Over 150 MB."); return; }
+    var img = mode() === "image";
+    if (img ? !isImage(f) : !isVideo(f)) { alert(img ? "Not a picture." : "Not a video."); return; }
+    if (f.size > (img ? 25e6 : 150e6)) { alert(img ? "Over 25 MB." : "Over 150 MB."); return; }
     file = f;
-    video.src = URL.createObjectURL(f);
     $("drop").style.display = "none"; $("preview").style.display = "block";
+    if (img) {
+      video.hidden = true; video.removeAttribute("src"); $("pic").hidden = false; $("pic").src = URL.createObjectURL(f);
+      $("meta").innerHTML = "<span><b>" + (f.size / 1048576).toFixed(1) + " MB</b></span><button class='linkbtn' id='change' type='button'>Choose another</button>";
+      $("change").addEventListener("click", function () { $("file").value = ""; $("file").click(); });
+      updateTrim();
+    } else {
+      $("pic").hidden = true; video.hidden = false; video.src = URL.createObjectURL(f);
+    }
   }
+  document.querySelectorAll('input[name="mode"]').forEach(function (r) { r.addEventListener("change", setMode); });
+  setMode();
   $("file").addEventListener("change", function (e) { pick(e.target.files[0]); });
   ["dragenter", "dragover"].forEach(function (ev) { $("drop").addEventListener(ev, function (e) { e.preventDefault(); $("drop").classList.add("over"); }); });
   ["dragleave", "drop"].forEach(function (ev) { $("drop").addEventListener(ev, function (e) { e.preventDefault(); $("drop").classList.remove("over"); }); });
   $("drop").addEventListener("drop", function (e) { pick(e.dataTransfer.files[0]); });
   video.addEventListener("error", function () {
-    if (!file) return;
+    if (!file || mode() === "image") return;
     duration = 0;
     $("meta").innerHTML = "<span><b>" + (file.size / 1048576).toFixed(1) + " MB</b></span><span>No preview here. It will still work.</span>" +
       "<button class='linkbtn' id='change' type='button'>Choose another</button>";
@@ -328,6 +363,7 @@
 
   /* trim */
   function updateTrim() {
+    if (mode() === "image") { $("go").disabled = !file; return !!file; }
     var s = parseFloat($("start").value) || 0, e = parseFloat($("end").value) || 0, d = duration || MAX;
     var ok = e > s && e - s <= MAX + 0.05 && s >= 0 && (!duration || e <= duration + 0.05);
     $("window").style.left = (Math.max(0, s) / d * 100) + "%";
@@ -398,12 +434,14 @@
     var media = $("media"), dls = $("downloads"); media.innerHTML = ""; dls.innerHTML = "";
     var vid = j.files.filter(function (f) { return /\.mp4$/.test(f.name); })[0];
     var gif = j.files.filter(function (f) { return /\.gif$/.test(f.name); })[0];
-    if (vid) { var v = document.createElement("video"); v.src = API + vid.url; v.controls = true; v.playsInline = true; v.loop = true;
+    var png = j.files.filter(function (f) { return /\.png$/.test(f.name); })[0];
+    if (png && gif) { var gi = document.createElement("img"); gi.src = API + gif.url; gi.alt = "Your picture in falling code"; media.appendChild(gi); }
+    else if (vid) { var v = document.createElement("video"); v.src = API + vid.url; v.controls = true; v.playsInline = true; v.loop = true;
                if (j.poster) v.poster = API + "/api/files/" + j.id + "/" + j.poster; media.appendChild(v); }
     else if (gif) { var im = document.createElement("img"); im.src = API + gif.url; im.alt = "Your generated GIF"; media.appendChild(im); }
     j.files.forEach(function (f, i) {
       var a = document.createElement("a"); a.href = API + f.url; a.download = f.name; a.className = "dl" + (i ? " alt" : "");
-      a.innerHTML = "Download " + (/\.gif$/.test(f.name) ? "GIF" : "video") + " <small>(" + f.mb + " MB)</small>";
+      a.innerHTML = "Download " + (/\.gif$/.test(f.name) ? "GIF" : /\.png$/.test(f.name) ? "picture" : "video") + " <small>(" + f.mb + " MB)</small>";
       dls.appendChild(a);
     });
     show("result", true); $("go").disabled = false;
