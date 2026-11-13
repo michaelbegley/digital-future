@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-kh8PguTKBxRTvWhfOAn79G02YPjT2RjT2c27Y2XomuM=' 'sha256-42wC1qUSfZMopfJLjHJspdXpGAgEvkWJ2juw36AE9pY=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-kh8PguTKBxRTvWhfOAn79G02YPjT2RjT2c27Y2XomuM=' 'sha256-OHeKP/R561dNhsjA2Wf1x7WUlKH/Wq9EwAMPEzVYRyQ=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -183,17 +183,31 @@
      smartphones (shrunk to fit, stuck to the top, white below) until a tap or 5 seconds */
   .oldphone { display: none; }
   html.oldphone-on, html.oldphone-on body { overflow: hidden; }
-  html.oldphone-on .oldphone { display: block; position: fixed; inset: 0; z-index: 9999; background: #fff; cursor: pointer;
-    transition: background-color .8s ease-in; }
-  html.oldphone-on .oldphone.dim { background-color: #161616; }
-  .oldphone img { display: block; width: 100%; height: auto; transform-origin: 50% 0;
+  html.oldphone-on, html.oldphone-on body { background: #fff; }
+  html.oldphone-on.op-dim, html.oldphone-on.op-dim body { background: #161616; }
+  html.oldphone-on .oldphone { display: block; position: fixed; top: 0; left: 0; right: 0; height: 130vh; z-index: 9999;
+    background: #fff; cursor: pointer; }
+  /* the white below snaps to gray in hard bands, top down, like an old page painting in */
+  .oldphone::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 0; background: #161616; }
+  html.oldphone-on .oldphone.dim::before { height: 100%; transition: height .36s steps(4, end); }
+  .oldphone .op-win { position: relative; z-index: 1; transform-origin: 50% 0;
     transition: transform .55s cubic-bezier(.5,0,.75,0), opacity .55s ease-in; }
-  html.oldphone-on .oldphone.zoom { background-color: rgba(22,22,22,0); }
-  .oldphone.zoom img { transform: scale(2.6); opacity: 0; }
+  .oldphone img { display: block; width: 100%; height: auto; }
+  html.oldphone-on .oldphone.zoom, html.oldphone-on .oldphone.zoom::before { background: transparent; }
+  .oldphone.zoom .op-win { transform: scale(2.6); opacity: 0; }
+  /* fake 2000s browser status bar, bottom left of the old desktop window */
+  .op-status { position: absolute; left: 0; bottom: 0; display: flex; align-items: center; gap: 4px;
+    max-width: 62%; height: 9px; padding: 0 4px 0 3px; background: #ece9d8; border-top: 1px solid #fff;
+    border-right: 1px solid #aca899; color: #333; font: 6.5px/9px Tahoma, Verdana, "Segoe UI", sans-serif;
+    white-space: nowrap; overflow: hidden; border-top-right-radius: 1px; opacity: .92; }
+  .op-status .op-text { overflow: hidden; text-overflow: ellipsis; }
+  .op-status .op-bar { flex: 0 0 28px; height: 4px; border: 1px solid #aca899; background: #fff; }
+  .op-status .op-bar i { display: block; height: 100%; width: 0; background: #316ac5; transition: width .9s linear; }
+  .op-status.done .op-bar { visibility: hidden; }
 </style>
 </head>
 <body>
-<div class="oldphone" id="oldphone" aria-hidden="true"><img src="oldphone.jpg" alt="" width="1280" height="800"></div>
+<div class="oldphone" id="oldphone" aria-hidden="true"><div class="op-win"><img src="oldphone.jpg" alt="" width="1280" height="800"><div class="op-status" id="op-status"><span class="op-text" id="op-text"></span><span class="op-bar"><i id="op-bar"></i></span></div></div></div>
 <canvas id="rain" aria-hidden="true"></canvas>
 <button class="theme" id="theme" type="button" aria-label="Switch between light and dark mode">Light / Dark</button>
 <div class="player" id="player" role="group" aria-label="Music">
@@ -633,11 +647,19 @@
     function go() {
       if (done) return; done = true;
       el.classList.add("zoom");
-      setTimeout(function () { root.classList.remove("oldphone-on"); el.remove(); }, 560);
+      setTimeout(function () { root.classList.remove("oldphone-on", "op-dim"); el.remove(); }, 560);
     }
     el.addEventListener("pointerdown", go);
-    setTimeout(function () { if (!done) el.classList.add("dim"); }, 1200);   // white, then very dark gray
+    setTimeout(function () { if (!done) { el.classList.add("dim"); root.classList.add("op-dim"); } }, 1200);   // white, then very dark gray
     setTimeout(go, 5000);
+    // fake status bar text while "loading"
+    var st = document.getElementById("op-status"), tx = document.getElementById("op-text"), bar = document.getElementById("op-bar");
+    var steps = [[0, "Connecting to digitalfuture.technology...", 8], [900, "Waiting for digitalfuture.technology...", 22],
+      [1900, "Transferring data from digitalfuture.technology...", 48], [3000, "Opening page https://digitalfuture.technology/...", 81],
+      [4200, "Done", 100]];
+    steps.forEach(function (s) { setTimeout(function () {
+      if (done || !tx) return; tx.textContent = s[1]; bar.style.width = s[2] + "%";
+      if (s[2] === 100) st.classList.add("done"); }, s[0]); });
   })();
 </script>
 </body>
