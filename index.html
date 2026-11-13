@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-Itk9pJd19JbsyotixJYi/sT9deUSjz0xdqThzUZCudI=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-aG0yDAkR0y9cvJpkCVHCLBriVs3CWgx/KgQr2qG2Bgk=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -503,6 +503,7 @@
     }).catch(function () { setTimeout(function () { poll(id); }, 3000); });
   }
 
+  var SHARE_FILES = !!(navigator.canShare && navigator.share) && matchMedia("(hover: none) and (pointer: coarse)").matches;
   function done(j) {
     clearInterval(timer); setStage("Done", "", 1); show("status", false);
     var media = $("media"), dls = $("downloads"); media.innerHTML = ""; dls.innerHTML = "";
@@ -517,6 +518,21 @@
       var a = document.createElement("a"); a.href = API + f.url; a.download = f.name; a.className = "dl" + (i ? " alt" : "");
       a.innerHTML = "Download " + (/\.gif$/.test(f.name) ? "GIF" : /\.png$/.test(f.name) ? "picture" : "video") + " <small>(" + f.mb + " MB)</small>";
       dls.appendChild(a);
+      // phones: open the share sheet with the file itself (Save Video / Save Image) instead of the
+      // browser's download prompt. The file is fetched ahead so the tap can open the sheet straight away.
+      if (SHARE_FILES) {
+        var file = null;
+        fetch(API + f.url).then(function (r) { return r.blob(); }).then(function (b) {
+          var type = /\.mp4$/.test(f.name) ? "video/mp4" : /\.gif$/.test(f.name) ? "image/gif" : "image/png";
+          var fl = new File([b], f.name, { type: type });
+          if (navigator.canShare({ files: [fl] })) file = fl;
+        }).catch(function () {});
+        a.addEventListener("click", function (e) {
+          if (!file) return;                       // not fetched yet or can't share: normal download
+          e.preventDefault();
+          navigator.share({ files: [file] }).catch(function () {});
+        });
+      }
     });
     show("result", true); $("go").disabled = false;
     resultShown = true; setHush(true);
