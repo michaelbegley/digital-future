@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-xU+E9Bn0Ave5Dnf0g+a7vNTyN2txwr8pJ1vN/V0R3bo=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-DJhAB4klH7H0RR0hhT5mO1rpHx5SLy7JU6uS93UkmyU=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -25,9 +25,7 @@
 <script src="config.js"></script>
 <script>
   (function () {
-    var t = null;
-    try { t = localStorage.getItem("df-theme"); } catch (e) {}
-    document.documentElement.dataset.theme = t || "dark";
+    document.documentElement.dataset.theme = "dark";   // dark only (light mode retired 13 Nov)
   })();
 </script>
 <script>
@@ -217,11 +215,9 @@
 <body>
 <div class="oldphone" id="oldphone" aria-hidden="true"><div class="op-win"><img src="oldphone.jpg" alt="" width="1280" height="800"><div class="op-status" id="op-status"><span class="op-text" id="op-text"></span><span class="op-bar"><i id="op-bar"></i></span></div></div></div>
 <canvas id="rain" aria-hidden="true"></canvas>
-<button class="theme" id="theme" type="button" aria-label="Switch between light and dark mode">Light / Dark</button>
 <div class="player" id="player" role="group" aria-label="Music">
   <span class="eq" aria-hidden="true"><u></u><u></u><u></u></span>
-  <span class="np"><i>&#9835;</i> digifuture.mp3</span>
-  <button type="button" id="musictoggle" aria-pressed="true">Music: On</button>
+  <button type="button" id="musictoggle" aria-pressed="true" aria-label="Music">&#9835; On</button>
 </div>
 
 <div class="page">
@@ -326,13 +322,7 @@
 </div>
 
 <script>
-  // theme before paint: saved choice, else the system setting
-  (function () {
-    var t = null;
-    try { t = localStorage.getItem("df-theme"); } catch (e) {}
-    if (!t) t = "dark";
-    document.documentElement.dataset.theme = t;
-  })();
+  document.documentElement.dataset.theme = "dark";
 </script>
 <script>
 (function () {
@@ -347,11 +337,6 @@
                 set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
                 del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
 
-  /* theme toggle */
-  $("theme").addEventListener("click", function () {
-    var t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = t; store.set("df-theme", t);
-  });
 
   /* segmented controls */
   var saved = null;
@@ -575,7 +560,7 @@
     gain.gain.linearRampToValueAtTime(target, now + ms / 1000);
   }
   function musicUpdate() {
-    mbtn.textContent = musicOn ? "Music: On" : "Music: Off";
+    mbtn.textContent = musicOn ? "\u266B On" : "\u266B Off";
     mbtn.setAttribute("aria-pressed", musicOn ? "true" : "false");
     var shouldPlay = musicOn && started && !hush && !document.hidden;
     clearTimeout(offT);
