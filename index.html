@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digital Future</title>
+<meta name="description" content="Upload a short video and get it back rebuilt from falling code, with a retro voice filter.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0f3d1c" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23000'/%3E%3Cpath d='M9 7v18M16 11v14M23 7v12' stroke='%2330d158' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<script src="config.js"></script>
+<script>
+  // theme before paint: saved choice, else the system setting
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("df-theme"); } catch (e) {}
+    if (!t) t = "dark";
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<style>
+  /* Digital Future: late-90s terminal look (original), dark by default */
+  :root {
+    --bg: #e9efe6; --panel: #f7faf5; --text: #0f3d1c; --muted: #4f6b55; --line: #0f3d1c;
+    --fill: #dfe8da; --fill-strong: #c9d8c2; --seg: #0f3d1c; --seg-text: #f7faf5;
+    --accent: #0a7a2f; --accent-text: #f7faf5; --accent-soft: rgba(10,122,47,.12);
+    --danger: #b3001b; --header: #0f3d1c; --header-text: #d9f7df; --glow: none; --rain: 10,122,47;
+    --mono: "Lucida Console", "Courier New", ui-monospace, Menlo, monospace;
+    --font: var(--mono);
+  }
+  [data-theme="dark"] {
+    --bg: #000; --panel: #020a04; --text: #33ff66; --muted: #1f9d45; --line: #1a7f37;
+    --fill: #031208; --fill-strong: #0b2e15; --seg: #33ff66; --seg-text: #000;
+    --accent: #33ff66; --accent-text: #000; --accent-soft: rgba(51,255,102,.1);
+    --danger: #ff4d4d; --header: #000; --header-text: #33ff66; --glow: 0 0 6px rgba(51,255,102,.55); --rain: 51,255,102;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 var(--font); -webkit-font-smoothing: antialiased; }
+  [data-theme="dark"] body { text-shadow: var(--glow); }
+  [data-theme="dark"] body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.18) 2px 3px); }
+  button, input, select { font: inherit; color: inherit; }
+  a { color: var(--accent); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  header { position: sticky; top: 0; z-index: 10; height: 48px; display: flex; align-items: center; justify-content: space-between;
+           padding: 0 max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
+           background: var(--header); color: var(--header-text); border-bottom: 2px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 14px; }
+  .brand svg { width: 22px; height: 22px; }
+  .brand small { opacity: .6; letter-spacing: .05em; font-weight: 400; }
+  .theme { height: 32px; border: 2px solid currentColor; background: transparent; color: var(--header-text); cursor: pointer;
+           padding: 0 10px; display: flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .theme:hover { background: var(--header-text); color: var(--header); }
+  .theme svg { width: 14px; height: 14px; }
+  [data-theme="dark"] .sun, [data-theme="light"] .moon { display: none; }
+
+  .hero { position: relative; overflow: hidden; padding: 56px 20px 44px; border-bottom: 2px solid var(--line); }
+  .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: .9; }
+  .hero > div { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+  .eyebrow { margin: 0 0 14px; font-size: 13px; color: var(--muted); letter-spacing: .1em; }
+  h1 { font-size: clamp(28px, 6vw, 52px); line-height: 1.12; margin: 0 0 16px; font-weight: 700; letter-spacing: -.01em; min-height: 2.3em; }
+  .cursor { display: inline-block; width: .55em; height: 1em; margin-left: 2px; background: currentColor; vertical-align: -0.12em; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .lede { color: var(--muted); font-size: 15px; margin: 0; max-width: 600px; background: var(--bg); display: inline; }
+
+  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 56px; }
+  .card { background: var(--panel); border: 2px solid var(--line); margin-bottom: 22px; padding: 0 0 20px; box-shadow: 6px 6px 0 var(--fill-strong); }
+  [data-theme="dark"] .card { box-shadow: 0 0 0 1px #000, 0 0 18px rgba(51,255,102,.08); }
+  .card > *:not(.step) { margin-left: 20px; margin-right: 20px; }
+  @media (max-width: 600px) { .card > *:not(.step) { margin-left: 14px; margin-right: 14px; } }
+  .step { display: flex; align-items: baseline; gap: 10px; margin: 0 0 18px; padding: 8px 14px; background: var(--line); color: var(--panel); text-shadow: none; }
+  [data-theme="dark"] .step { color: #000; background: var(--accent); }
+  .step span { font-size: 12px; opacity: .8; }
+  .step h2 { margin: 0; font-size: 15px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+
+  .drop { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 200px;
+          border: 2px dashed var(--line); cursor: pointer; text-align: center; padding: 24px; transition: background .15s; }
+  .drop:hover, .drop.over { background: var(--accent-soft); }
+  .drop svg { width: 36px; height: 36px; color: var(--accent); }
+  .drop strong { font-size: 16px; letter-spacing: .06em; text-transform: uppercase; }
+  .drop small { color: var(--muted); font-size: 13px; }
+  .preview { display: none; }
+  .preview video { width: 100%; max-height: 60vh; background: #000; display: block; border: 2px solid var(--line); }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 13px; margin-top: 10px !important; }
+  .meta b { color: var(--text); font-weight: 400; }
+  .linkbtn { border: 0; background: none; color: var(--accent); cursor: pointer; padding: 0; font-size: 13px; text-decoration: underline; }
+
+  .trim { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 520px) { .trim { grid-template-columns: 1fr; } }
+  .field label { display: block; font-size: 12px; color: var(--muted); margin: 0 0 6px; letter-spacing: .08em; text-transform: uppercase; }
+  .row { display: flex; gap: 8px; }
+  input[type=number] { width: 100%; min-width: 0; height: 42px; border: 2px solid var(--line); background: var(--fill); padding: 0 12px;
+                       font-variant-numeric: tabular-nums; outline: none; border-radius: 0; }
+  input[type=number]:focus { background: var(--accent-soft); box-shadow: 0 0 0 2px var(--accent); }
+  .ghost { height: 42px; border: 2px solid var(--line); background: var(--panel); color: var(--text); padding: 0 12px; white-space: nowrap;
+           cursor: pointer; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  .ghost:hover { background: var(--accent); color: var(--accent-text); text-shadow: none; }
+  .bar { position: relative; height: 10px; border: 2px solid var(--line); background: var(--fill); margin-top: 18px !important; margin-bottom: 8px !important; }
+  .bar i { position: absolute; top: 0; bottom: 0; background: var(--accent); }
+  .hint { color: var(--muted); font-size: 13px; margin: 0; }
+  .hint.warn { color: var(--danger); }
+
+  .opts { display: grid; gap: 20px; }
+  .opt > div:first-child { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; gap: 10px; }
+  .opt .name { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .opt .desc { font-size: 12px; color: var(--muted); text-align: right; }
+  .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 2px solid var(--line); }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label { text-align: center; padding: 8px 4px; font-size: 13px; cursor: pointer; user-select: none; white-space: nowrap; border-left: 2px solid var(--line); }
+  .seg label:nth-of-type(1) { border-left: 0; }
+  .seg label:hover { background: var(--accent-soft); }
+  .seg input:checked + label { background: var(--seg); color: var(--seg-text); text-shadow: none; font-weight: 700; }
+  .seg input:checked + label::before { content: "> "; }
+  .seg input:focus-visible + label { outline: 2px dashed var(--accent); outline-offset: -5px; }
+  .remember { display: flex; align-items: center; justify-content: space-between; border-top: 2px dashed var(--line); padding-top: 16px; }
+  .switch { position: relative; width: 56px; height: 28px; flex: none; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch span { position: absolute; inset: 0; border: 2px solid var(--line); background: var(--fill); cursor: pointer; }
+  .switch span::after { content: "OFF"; position: absolute; inset: 2px 28px 2px 2px; background: var(--line); color: var(--panel);
+                        font-size: 9px; display: grid; place-items: center; transition: inset .15s; text-shadow: none; }
+  .switch input:checked + span::after { content: "ON"; inset: 2px 2px 2px 28px; background: var(--accent); color: var(--accent-text); }
+
+  .go { display: block; width: 100%; height: 58px; border: 2px solid var(--line); background: var(--accent); color: var(--accent-text);
+        font-size: 18px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; cursor: pointer; margin: 4px 0 24px; text-shadow: none;
+        box-shadow: 6px 6px 0 var(--fill-strong); }
+  [data-theme="dark"] .go { box-shadow: 0 0 22px rgba(51,255,102,.35); }
+  .go:hover:not(:disabled) { filter: brightness(1.1); }
+  .go:active:not(:disabled) { transform: translate(2px, 2px); }
+  .go:disabled { opacity: .35; cursor: default; }
+
+  .status { display: none; }
+  .status h2 { font-size: 18px; margin: 0 0 4px; letter-spacing: .06em; text-transform: uppercase; }
+  .status h2::after { content: ""; display: inline-block; width: .5em; height: 1em; margin-left: 6px; background: currentColor; vertical-align: -0.12em; animation: blink 1s steps(1) infinite; }
+  .status h2.error::after { display: none; }
+  .progress { height: 18px; border: 2px solid var(--line); background: var(--fill); overflow: hidden; margin-top: 14px !important; margin-bottom: 8px !important; }
+  .progress i { display: block; height: 100%; width: 0; transition: width .4s steps(20);
+                background: repeating-linear-gradient(90deg, var(--accent) 0 10px, transparent 10px 13px); }
+  .result { display: none; }
+  .result video, .result img { width: 100%; background: #000; display: block; border: 2px solid var(--line); }
+  .downloads { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px !important; }
+  .dl { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border: 2px solid var(--line); background: var(--accent);
+        color: var(--accent-text); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; text-shadow: none; }
+  .dl.alt { background: var(--panel); color: var(--text); }
+  .dl small { opacity: .75; font-weight: 400; text-transform: none; }
+  .error { color: var(--danger); }
+
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 22px 20px calc(36px + env(safe-area-inset-bottom)); border-top: 2px solid var(--line); }
+  footer p { margin: 4px auto; max-width: 600px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="none" stroke="currentColor" stroke-width="3"/><path d="M9 7v18M16 11v14M23 7v12" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>
+    Digital Future <small>v1.0</small>
+  </div>
+  <button class="theme" id="theme" aria-label="Switch between light and dark mode">
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>
+    <span class="sun">Light</span><span class="moon">Dark</span>
+  </button>
+</header>
+
+<section class="hero">
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div>
+    <p class="eyebrow">C:\DIGITAL_FUTURE&gt; run.exe</p>
+    <h1 aria-label="Rebuild any clip in falling code."><span id="typed"></span><span class="cursor" aria-hidden="true"></span></h1>
+    <p class="lede">Upload a short video. The subject comes back made of glowing characters, the scene is traced in light, and the voice runs through a retro filter.</p>
+  </div>
+</section>
+
+<main>
+  <section class="card" aria-labelledby="s1">
+    <div class="step"><span>01</span><h2 id="s1">Choose a video</h2></div>
+    <label class="drop" id="drop" for="file">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      <strong>Tap to choose a video</strong>
+      <small>or drag one here · MP4, MOV, WebM · up to 150 MB</small>
+    </label>
+    <input class="sr" type="file" id="file" accept="video/*">
+    <div class="preview" id="preview">
+      <video id="video" controls playsinline preload="metadata"></video>
+      <div class="meta" id="meta"></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="s2">
+    <div class="step"><span>02</span><h2 id="s2">Pick up to 60 seconds</h2></div>
+    <div class="trim">
+      <div class="field">
+        <label for="start">Start (seconds)</label>
+        <div class="row"><input type="number" id="start" min="0" step="0.1" value="0" inputmode="decimal"><button class="ghost" data-pos="start" type="button">Current position</button></div>
+      </div>
+      <div class="field">
+        <label for="end">End (seconds)</label>
+        <div class="row"><input type="number" id="end" min="0" step="0.1" value="60" inputmode="decimal"><button class="ghost" data-pos="end" type="button">Current position</button></div>
+      </div>
+    </div>
+    <div class="bar" aria-hidden="true"><i id="window"></i></div>
+    <p class="hint" id="trimhint">Keeps your video's shape and smoothness, up to 24 frames per second.</p>
+  </section>
+
+  <section class="card" aria-labelledby="s3">
+    <div class="step"><span>03</span><h2 id="s3">Adjust the look</h2></div>
+    <div class="opts" id="opts">
+      <div class="opt"><div><span class="name">Output</span><span class="desc">GIFs have no sound</span></div>
+        <div class="seg" role="radiogroup" data-name="output" data-options="mp4:Video,gif:GIF,both:Both"></div></div>
+      <div class="opt"><div><span class="name">Voice</span><span class="desc">Retro toy speaker</span></div>
+        <div class="seg" role="radiogroup" data-name="voice" data-options="toy:Filtered,none:Original"></div></div>
+      <div class="opt"><div><span class="name">Subject</span><span class="desc">What to rebuild in detail</span></div>
+        <div class="seg" role="radiogroup" data-name="subject" data-options="auto:Auto,person:Person,object:Object"></div></div>
+      <div class="opt"><div><span class="name">Rain</span><span class="desc">Falling code density</span></div>
+        <div class="seg" role="radiogroup" data-name="rain" data-options="light:Light,medium:Medium,heavy:Heavy"></div></div>
+      <div class="opt"><div><span class="name">Scene</span><span class="desc">How much of the background is traced</span></div>
+        <div class="seg" role="radiogroup" data-name="detail" data-options="minimal:Minimal,balanced:Balanced,detailed:Detailed"></div></div>
+      <div class="opt"><div><span class="name">Size</span><span class="desc">Smaller loads faster</span></div>
+        <div class="seg" role="radiogroup" data-name="size" data-options="720:720p,480:480p"></div></div>
+      <div class="remember"><span class="name">Remember settings</span>
+        <label class="switch"><input type="checkbox" id="remember"><span></span><b class="sr">Remember settings</b></label></div>
+    </div>
+  </section>
+
+  <button class="go" id="go" disabled>Generate</button>
+
+  <section class="card status" id="status" aria-live="polite">
+    <h2 id="stage">Uploading</h2>
+    <p class="hint" id="sub">Keep this page open.</p>
+    <div class="progress"><i id="pbar"></i></div>
+    <p class="hint" id="elapsed"></p>
+  </section>
+
+  <section class="card result" id="result">
+    <div class="step"><span>04</span><h2>Your clip</h2></div>
+    <div id="media"></div>
+    <div class="downloads" id="downloads"></div>
+    <p class="hint" style="margin-top:14px">Files are deleted from our server within an hour. <button class="linkbtn" id="again" type="button">Make another</button></p>
+  </section>
+</main>
+
+<footer>
+  <p>Digital Future · Use your own clips or ones you have the right to use.</p>
+  <p>Your video is processed on our server, never shared, and deleted within an hour.</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var API = (window.DF_API || "").replace(/\/$/, "");
+  var MAX = 60, $ = function (id) { return document.getElementById(id); };
+  var DEFAULTS = { output: "mp4", voice: "toy", subject: "auto", rain: "medium", detail: "balanced", size: "720" };
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+                del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
+
+  /* theme toggle */
+  $("theme").addEventListener("click", function () {
+    var t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = t; store.set("df-theme", t);
+  });
+
+  /* segmented controls */
+  var saved = null;
+  try { saved = JSON.parse(store.get("df-settings") || "null"); } catch (e) {}
+  document.querySelectorAll(".seg").forEach(function (seg) {
+    var name = seg.dataset.name, current = (saved && saved[name]) || DEFAULTS[name];
+    seg.dataset.options.split(",").forEach(function (pair, i) {
+      var p = pair.split(":"), id = name + "-" + p[0];
+      var input = document.createElement("input");
+      input.type = "radio"; input.name = name; input.value = p[0]; input.id = id; input.checked = p[0] === current;
+      var label = document.createElement("label"); label.htmlFor = id; label.textContent = p[1];
+      seg.appendChild(input); seg.appendChild(label);
+    });
+  });
+  $("remember").checked = !!saved;
+  function options() {
+    var o = {};
+    Object.keys(DEFAULTS).forEach(function (k) { o[k] = document.querySelector('input[name="' + k + '"]:checked').value; });
+    return o;
+  }
+  function persist() { if ($("remember").checked) store.set("df-settings", JSON.stringify(options())); else store.del("df-settings"); }
+  $("opts").addEventListener("change", persist);
+
+  /* file + preview */
+  var file = null, duration = 0, video = $("video");
+  function pick(f) {
+    if (!f) return;
+    if (!/^video\//.test(f.type) && !/\.(mp4|mov|webm|m4v|mkv)$/i.test(f.name)) { alert("Please choose a video file."); return; }
+    if (f.size > 150e6) { alert("That video is over 150 MB."); return; }
+    file = f;
+    video.src = URL.createObjectURL(f);
+    $("drop").style.display = "none"; $("preview").style.display = "block";
+  }
+  $("file").addEventListener("change", function (e) { pick(e.target.files[0]); });
+  ["dragenter", "dragover"].forEach(function (ev) { $("drop").addEventListener(ev, function (e) { e.preventDefault(); $("drop").classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function (ev) { $("drop").addEventListener(ev, function (e) { e.preventDefault(); $("drop").classList.remove("over"); }); });
+  $("drop").addEventListener("drop", function (e) { pick(e.dataTransfer.files[0]); });
+  video.addEventListener("error", function () {
+    if (!file) return;
+    duration = 0;
+    $("meta").innerHTML = "<span><b>" + (file.size / 1048576).toFixed(1) + " MB</b></span><span>Preview not available in this browser — it will still work.</span>" +
+      "<button class='linkbtn' id='change' type='button'>Choose another</button>";
+    $("change").addEventListener("click", function () { $("file").value = ""; $("file").click(); });
+    $("start").value = 0; $("end").value = MAX; updateTrim();
+  });
+  video.addEventListener("loadedmetadata", function () {
+    duration = video.duration || 0;
+    $("start").value = 0; $("end").value = Math.min(MAX, duration).toFixed(1);
+    var mb = (file.size / 1048576).toFixed(1);
+    var dims = video.videoWidth ? "<span><b>" + video.videoWidth + "×" + video.videoHeight + "</b></span>" : "<span>Preview not available in this browser — it will still work.</span>";
+    $("meta").innerHTML = "<span><b>" + mb + " MB</b></span>" + dims + "<span><b>" + duration.toFixed(1) +
+      " s</b></span><button class='linkbtn' id='change' type='button'>Choose another</button>";
+    $("change").addEventListener("click", function () { $("file").value = ""; $("file").click(); });
+    updateTrim();
+  });
+
+  /* trim */
+  function updateTrim() {
+    var s = parseFloat($("start").value) || 0, e = parseFloat($("end").value) || 0, d = duration || MAX;
+    var ok = e > s && e - s <= MAX + 0.05 && s >= 0 && (!duration || e <= duration + 0.05);
+    $("window").style.left = (Math.max(0, s) / d * 100) + "%";
+    $("window").style.width = (Math.max(0, Math.min(e, d) - s) / d * 100) + "%";
+    var h = $("trimhint");
+    if (!ok && e - s > MAX) { h.textContent = "That's " + (e - s).toFixed(1) + " seconds. The limit is 60."; h.className = "hint warn"; }
+    else if (!ok) { h.textContent = "End needs to be after start, within the video."; h.className = "hint warn"; }
+    else { h.textContent = (e - s).toFixed(1) + " seconds · about " + Math.max(1, Math.round((e - s) * 6)) + " s to make"; h.className = "hint"; }
+    $("go").disabled = !(file && ok);
+    return ok;
+  }
+  $("start").addEventListener("input", updateTrim); $("end").addEventListener("input", updateTrim);
+  document.querySelectorAll("[data-pos]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var t = video.currentTime || 0, which = b.dataset.pos;
+      $(which).value = t.toFixed(1);
+      if (which === "start" && (parseFloat($("end").value) - t > MAX || parseFloat($("end").value) <= t))
+        $("end").value = Math.min(duration || t + MAX, t + MAX).toFixed(1);
+      updateTrim();
+    });
+  });
+
+  /* generate */
+  var t0 = 0, timer = null;
+  function show(el, on) { $(el).style.display = on ? "block" : "none"; }
+  function setStage(title, sub, p) {
+    $("stage").textContent = title; $("sub").textContent = sub || ""; $("pbar").style.width = Math.round(p * 100) + "%";
+  }
+  function tick() { var s = Math.round((Date.now() - t0) / 1000); $("elapsed").textContent = "Elapsed " + Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }
+  function fail(msg) { setStage("Something went wrong", msg, 0); $("stage").classList.add("error"); clearInterval(timer); $("go").disabled = false; }
+
+  $("go").addEventListener("click", function () {
+    if (!updateTrim()) return;
+    persist();
+    var o = options(), fd = new FormData();
+    fd.append("file", file); fd.append("start", $("start").value); fd.append("end", $("end").value);
+    Object.keys(o).forEach(function (k) { fd.append(k, o[k]); });
+    $("go").disabled = true; $("stage").classList.remove("error");
+    show("result", false); show("status", true); setStage("Uploading", "Keep this page open.", 0);
+    t0 = Date.now(); clearInterval(timer); timer = setInterval(tick, 1000); tick();
+    $("status").scrollIntoView({ behavior: "smooth", block: "center" });
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", API + "/api/jobs");
+    xhr.upload.onprogress = function (e) { if (e.lengthComputable) setStage("Uploading", Math.round(e.loaded / e.total * 100) + "%", e.loaded / e.total * 0.05); };
+    xhr.onload = function () {
+      var r = {}; try { r = JSON.parse(xhr.responseText); } catch (e) {}
+      if (xhr.status !== 200) return fail(r.detail || "The server didn't accept the upload.");
+      poll(r.id);
+    };
+    xhr.onerror = function () { fail("Couldn't reach the server. Check your connection and try again."); };
+    xhr.send(fd);
+  });
+
+  function poll(id) {
+    fetch(API + "/api/jobs/" + id).then(function (r) { return r.json().then(function (j) { return [r.ok, j]; }); }).then(function (x) {
+      var ok = x[0], j = x[1];
+      if (!ok) return fail(j.detail || "Lost track of that job.");
+      if (j.status === "queued") setStage("Waiting in line", j.ahead === 1 ? "1 clip ahead of yours" : j.ahead + " clips ahead of yours", 0.05);
+      else if (j.status === "running") setStage(j.stage, Math.round(j.progress * 100) + "%", 0.05 + j.progress * 0.95);
+      if (j.status === "error") return fail(j.error || "Rendering failed.");
+      if (j.status === "done") return done(j);
+      setTimeout(function () { poll(id); }, 1500);
+    }).catch(function () { setTimeout(function () { poll(id); }, 3000); });
+  }
+
+  function done(j) {
+    clearInterval(timer); setStage("Done", "", 1); show("status", false);
+    var media = $("media"), dls = $("downloads"); media.innerHTML = ""; dls.innerHTML = "";
+    var vid = j.files.filter(function (f) { return /\.mp4$/.test(f.name); })[0];
+    var gif = j.files.filter(function (f) { return /\.gif$/.test(f.name); })[0];
+    if (vid) { var v = document.createElement("video"); v.src = API + vid.url; v.controls = true; v.playsInline = true; v.loop = true;
+               if (j.poster) v.poster = API + "/api/files/" + j.id + "/" + j.poster; media.appendChild(v); }
+    else if (gif) { var im = document.createElement("img"); im.src = API + gif.url; im.alt = "Your generated GIF"; media.appendChild(im); }
+    j.files.forEach(function (f, i) {
+      var a = document.createElement("a"); a.href = API + f.url; a.download = f.name; a.className = "dl" + (i ? " alt" : "");
+      a.innerHTML = "Download " + (/\.gif$/.test(f.name) ? "GIF" : "video") + " <small>" + f.mb + " MB</small>";
+      dls.appendChild(a);
+    });
+    show("result", true); $("go").disabled = false;
+    $("result").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  $("again").addEventListener("click", function () { show("result", false); window.scrollTo({ top: 0, behavior: "smooth" }); });
+
+  /* typed headline */
+  (function () {
+    var text = "Rebuild any clip in falling code.", el = $("typed"), i = 0;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = text; return; }
+    setTimeout(function step() { el.textContent = text.slice(0, ++i); if (i < text.length) setTimeout(step, 55 + Math.random() * 60); }, 700);
+  })();
+
+  /* hero rain (decorative, pauses off-screen and for reduced motion) */
+  var c = $("rain"), ctx = c.getContext("2d"), cols = [], fs = 15, raf = 0, visible = true, cssH = 0;
+  var chars = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789=+*<>";
+  function size() {
+    var r = c.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); cssH = r.height;
+    c.width = r.width * dpr; c.height = r.height * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cols = []; for (var i = 0; i < Math.ceil(r.width / fs); i++) cols.push({ y: Math.random() * -40, v: 0.12 + Math.random() * 0.2 });
+  }
+  function draw() {
+    var w = c.width, h = c.height, rgb = rainRGB;
+    ctx.clearRect(0, 0, w, h); ctx.font = fs + "px ui-monospace, Menlo, monospace";
+    for (var i = 0; i < cols.length; i++) {
+      var col = cols[i]; col.y += col.v;
+      for (var k = 0; k < 14; k++) {
+        var y = (Math.floor(col.y) - k) * fs; if (y < -fs || y > h) continue;
+        var a = k === 0 ? 0.5 : 0.22 * (1 - k / 14);
+        ctx.fillStyle = "rgba(" + rgb + "," + a + ")";
+        ctx.fillText(chars[(i * 7 + Math.floor(col.y) - k) % chars.length], i * fs, y);
+      }
+      if ((col.y - 14) * fs > cssH) col.y = Math.random() * -20;
+    }
+    if (visible) raf = requestAnimationFrame(draw);
+  }
+  var rainRGB = "";
+  function readRain() { rainRGB = getComputedStyle(document.documentElement).getPropertyValue("--rain").trim(); }
+  readRain();
+  new MutationObserver(readRain).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    size(); addEventListener("resize", size); draw();
+    new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) { cancelAnimationFrame(raf); draw(); } }).observe(c);
+  }
+})();
+</script>
+</body>
+</html>
