@@ -46,6 +46,21 @@
            border: 2px solid; border-color: #fff #404040 #404040 #fff; }
   .theme:active { border-color: #404040 #fff #fff #404040; }
 
+  .player { position: fixed; z-index: 2; top: 8px; left: 8px; display: flex; align-items: center; gap: 6px;
+            background: #c0c0c0; color: #000; padding: 3px 4px 3px 8px; font: 11px var(--mono);
+            border: 2px solid; border-color: #fff #404040 #404040 #fff; max-width: calc(100% - 140px); }
+  .player .np { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
+  .player .np i { font-style: normal; color: #006600; }
+  .player .eq { display: inline-flex; gap: 1px; align-items: flex-end; height: 10px; }
+  .player .eq u { display: block; width: 3px; background: #006600; height: 2px; }
+  .player.on .eq u { animation: eq .8s infinite ease-in-out alternate; }
+  .player.on .eq u:nth-child(2) { animation-delay: -.3s; } .player.on .eq u:nth-child(3) { animation-delay: -.6s; }
+  @keyframes eq { from { height: 2px; } to { height: 10px; } }
+  .player button { font: 11px var(--mono); text-transform: uppercase; background: #c0c0c0; color: #000; padding: 2px 6px; cursor: pointer;
+                   border: 2px solid; border-color: #fff #404040 #404040 #fff; }
+  .player button:active { border-color: #404040 #fff #fff #404040; }
+  @media (max-width: 760px) { .page { padding-top: 48px; } }
+  @media (prefers-reduced-motion: reduce) { .player.on .eq u { animation: none; height: 6px; } }
   .logo { margin: 4px 0 18px; font: 400 clamp(34px, 9vw, 50px)/1 var(--serif); letter-spacing: .14em; padding-left: .14em; color: var(--green);
           text-shadow: 0 0 6px rgba(var(--rain), .7); }
 
@@ -151,6 +166,12 @@
 <body>
 <canvas id="rain" aria-hidden="true"></canvas>
 <button class="theme" id="theme" type="button" aria-label="Switch between light and dark mode">Light / Dark</button>
+<div class="player" id="player" role="group" aria-label="Music">
+  <span class="eq" aria-hidden="true"><u></u><u></u><u></u></span>
+  <span class="np"><i>&#9835;</i> neo.mp3</span>
+  <button type="button" id="musictoggle" aria-pressed="true">Music: On</button>
+</div>
+<audio id="music" src="music.mp3" preload="none" loop></audio>
 
 <div class="page">
   <h1 class="logo">DIGITAL FUTURE</h1>
@@ -249,7 +270,7 @@
       <span class="badge"><b>Y2K</b>Compliant</span>
     </div>
     <p id="count" hidden>You are visitor No. <span class="counter" id="countn">000000</span></p>
-    <p>Use your own clips, or ones you have the right to use.<br>Videos are never shared and are deleted within an hour.</p>
+    <p>Music from Pixabay.<br>Use your own clips, or ones you have the right to use.<br>Videos are never shared and are deleted within an hour.</p>
   </footer>
 </div>
 
@@ -447,9 +468,54 @@
       dls.appendChild(a);
     });
     show("result", true); $("go").disabled = false;
+    resultShown = true; setHush(true);
     $("result").scrollIntoView({ behavior: "smooth", block: "start" });
   }
-  $("again").addEventListener("click", function () { show("result", false); window.scrollTo({ top: 0, behavior: "smooth" }); });
+  $("again").addEventListener("click", function () { resultShown = false; setHush(false); show("result", false); window.scrollTo({ top: 0, behavior: "smooth" }); });
+
+  /* music: starts quietly on the first tap or click (browsers block sound before that),
+     fades in, and goes quiet while a video preview plays or a result is on screen.
+     Turning it off is remembered on this device. */
+  var music = $("music"), mbtn = $("musictoggle"), player = $("player");
+  var musicOn = store.get("df-music") !== "off", started = false, hush = false, fadeT = null;
+  var MUSIC_VOL = 0.35;
+  function fadeTo(target, ms, then) {
+    clearInterval(fadeT);
+    var start = music.volume, t0 = Date.now();
+    fadeT = setInterval(function () {
+      var k = Math.min(1, (Date.now() - t0) / ms);
+      music.volume = Math.max(0, Math.min(1, start + (target - start) * k));
+      if (k >= 1) { clearInterval(fadeT); if (then) then(); }
+    }, 50);
+  }
+  function musicUpdate() {
+    mbtn.textContent = musicOn ? "Music: On" : "Music: Off";
+    mbtn.setAttribute("aria-pressed", musicOn ? "true" : "false");
+    var shouldPlay = musicOn && started && !hush;
+    if (shouldPlay) {
+      if (music.paused) { music.volume = 0; var pr = music.play(); if (pr && pr.catch) pr.catch(function () {}); }
+      fadeTo(MUSIC_VOL, 6000);
+      player.classList.add("on");
+    } else {
+      player.classList.remove("on");
+      if (!music.paused) fadeTo(0, 800, function () { music.pause(); });
+    }
+  }
+  function firstTouch(e) {
+    if (started) return;
+    if (e && e.target && e.target.closest && e.target.closest("#player")) return;
+    started = true; musicUpdate();
+  }
+  ["pointerdown", "keydown", "touchstart"].forEach(function (ev) { document.addEventListener(ev, firstTouch, { passive: true }); });
+  mbtn.addEventListener("click", function () {
+    musicOn = !musicOn; started = true;
+    store.set("df-music", musicOn ? "on" : "off"); musicUpdate();
+  });
+  function setHush(on) { hush = on; musicUpdate(); }
+  video.addEventListener("play", function () { setHush(true); });
+  video.addEventListener("pause", function () { if (!resultShown) setHush(false); });
+  var resultShown = false;
+  musicUpdate();
 
   /* visit counter: one anonymous count per tab. Only a number per 10-minute slot and a
      daily count per source group (x, reddit, tiktok...) are kept. No address, no id,
