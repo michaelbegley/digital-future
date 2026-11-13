@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-aG0yDAkR0y9cvJpkCVHCLBriVs3CWgx/KgQr2qG2Bgk=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-CGoVCLP1XsDsarG/LmF91Db5imJw9PgcFa6im8PIS6w=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-cmMvs6N+i5ngWlbiUZbsfDh8wDxk5REphbrt843VTqU=' 'sha256-xU+E9Bn0Ave5Dnf0g+a7vNTyN2txwr8pJ1vN/V0R3bo=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -338,6 +338,9 @@
 (function () {
   "use strict";
   var API = (window.DF_API || "").replace(/\/$/, "");
+  // results are served through our own address (a Vercel rewrite), so links, the share sheet and
+  // "View" show digitalfuture.technology, never the video server's address
+  var FILES = /(^|\.)digitalfuture\.technology$|\.vercel\.app$/.test(location.hostname) ? "" : API;
   var MAX = 60, $ = function (id) { return document.getElementById(id); };
   var DEFAULTS = { mode: "video", output: "mp4", voice: "toy", subject: "auto", rain: "medium", detail: "balanced", size: "720" };
   var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -510,19 +513,19 @@
     var vid = j.files.filter(function (f) { return /\.mp4$/.test(f.name); })[0];
     var gif = j.files.filter(function (f) { return /\.gif$/.test(f.name); })[0];
     var png = j.files.filter(function (f) { return /\.png$/.test(f.name); })[0];
-    if (png && gif) { var gi = document.createElement("img"); gi.src = API + gif.url; gi.alt = "Your picture in falling code"; media.appendChild(gi); }
-    else if (vid) { var v = document.createElement("video"); v.src = API + vid.url; v.controls = true; v.playsInline = true; v.loop = true;
-               if (j.poster) v.poster = API + "/api/files/" + j.id + "/" + j.poster; media.appendChild(v); }
-    else if (gif) { var im = document.createElement("img"); im.src = API + gif.url; im.alt = "Your generated GIF"; media.appendChild(im); }
+    if (png && gif) { var gi = document.createElement("img"); gi.src = FILES + gif.url; gi.alt = "Your picture in falling code"; media.appendChild(gi); }
+    else if (vid) { var v = document.createElement("video"); v.src = FILES + vid.url; v.controls = true; v.playsInline = true; v.loop = true;
+               if (j.poster) v.poster = FILES + "/api/files/" + j.id + "/" + j.poster; media.appendChild(v); }
+    else if (gif) { var im = document.createElement("img"); im.src = FILES + gif.url; im.alt = "Your generated GIF"; media.appendChild(im); }
     j.files.forEach(function (f, i) {
-      var a = document.createElement("a"); a.href = API + f.url; a.download = f.name; a.className = "dl" + (i ? " alt" : "");
+      var a = document.createElement("a"); a.href = FILES + f.url; a.download = f.name; a.className = "dl" + (i ? " alt" : "");
       a.innerHTML = "Download " + (/\.gif$/.test(f.name) ? "GIF" : /\.png$/.test(f.name) ? "picture" : "video") + " <small>(" + f.mb + " MB)</small>";
       dls.appendChild(a);
       // phones: open the share sheet with the file itself (Save Video / Save Image) instead of the
       // browser's download prompt. The file is fetched ahead so the tap can open the sheet straight away.
       if (SHARE_FILES) {
         var file = null;
-        fetch(API + f.url).then(function (r) { return r.blob(); }).then(function (b) {
+        fetch(FILES + f.url).then(function (r) { return r.blob(); }).then(function (b) {
           var type = /\.mp4$/.test(f.name) ? "video/mp4" : /\.gif$/.test(f.name) ? "image/gif" : "image/png";
           var fl = new File([b], f.name, { type: type });
           if (navigator.canShare({ files: [fl] })) file = fl;
