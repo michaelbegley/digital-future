@@ -34,6 +34,7 @@
   body { font: 16px/1.35 var(--serif); min-height: 100vh; -webkit-text-size-adjust: 100%; }
   #rain { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
   a { color: var(--link); } a:visited { color: var(--visited); }
+  [hidden] { display: none !important; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   .page { position: relative; z-index: 1; width: min(620px, 100% - 24px); margin: 0 auto; background: var(--page);
@@ -156,7 +157,7 @@
 
   <ul class="menu">
     <li><a href="#s1">Choose a File</a></li>
-    <li><a href="#s2">Trim</a></li>
+    <li class="vidonly"><a href="#s2">Trim</a></li>
     <li><a href="#s3">Adjust the Look</a></li>
     <li><a href="#go">Generate</a></li>
   </ul>
@@ -364,6 +365,7 @@
   /* trim */
   function updateTrim() {
     if (mode() === "image") { $("go").disabled = !file; return !!file; }
+    if (!file) { $("trimhint").textContent = "Up to 60 seconds."; $("trimhint").className = "hint"; $("go").disabled = true; return false; }
     var s = parseFloat($("start").value) || 0, e = parseFloat($("end").value) || 0, d = duration || MAX;
     var ok = e > s && e - s <= MAX + 0.05 && s >= 0 && (!duration || e <= duration + 0.05);
     $("window").style.left = (Math.max(0, s) / d * 100) + "%";
