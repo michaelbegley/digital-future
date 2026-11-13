@@ -418,29 +418,31 @@
   }).catch(function () {});
 
   /* background rain: drawn here, dense, pauses when hidden or for reduced motion */
-  var c = $("rain"), ctx = c.getContext("2d"), cols = [], fs = 16, W = 0, H = 0, rgb = "", bg = "";
+  var c = $("rain"), ctx = c.getContext("2d"), cols = [], fs = 14, W = 0, H = 0, rgb = "", bg = "";
   var chars = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789:=+*<>|";
   function readColors() { var cs = getComputedStyle(document.documentElement); rgb = cs.getPropertyValue("--rain").trim(); bg = cs.getPropertyValue("--rainbg").trim(); }
+  function drop(atTop) { return { y: atTop ? -Math.random() * 30 : Math.random() * H / fs, v: 0.12 + Math.random() * 0.4, n: 14 + (Math.random() * 30 | 0), s: Math.random() * 999 | 0 }; }
   function size() {
     var dpr = Math.min(2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight;
     c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cols = []; for (var i = 0; i < Math.ceil(W / fs); i++) cols.push({ y: Math.random() * H / fs, v: 0.15 + Math.random() * 0.35, n: 12 + (Math.random() * 22 | 0), s: Math.random() * 999 | 0 });
+    cols = []; for (var i = 0; i < Math.ceil(W / fs); i++) cols.push([drop(false), drop(false)]);
   }
+  function glyph(n) { return chars[((n % chars.length) + chars.length) % chars.length]; }
   function frame() {
     ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H); ctx.font = fs + "px monospace";
-    for (var i = 0; i < cols.length; i++) {
-      var col = cols[i], head = Math.floor(col.y);
-      for (var k = 0; k < col.n; k++) {
+    var flick = Date.now() / 90 | 0;
+    for (var i = 0; i < cols.length; i++) for (var j = 0; j < 2; j++) {
+      var d = cols[i][j], head = Math.floor(d.y);
+      for (var k = 0; k < d.n; k++) {
         var y = (head - k) * fs; if (y < -fs || y > H) continue;
-        var ch = chars[(col.s + (head - k) * 7 + (k === 0 ? (Date.now() / 90 | 0) : 0)) % chars.length];
-        ctx.fillStyle = k === 0 ? "rgba(220,255,220,.9)" : "rgba(" + rgb + "," + (0.85 * (1 - k / col.n)).toFixed(3) + ")";
-        ctx.fillText(ch, i * fs, y);
+        ctx.fillStyle = k === 0 ? "rgba(225,255,225,.95)" : "rgba(" + rgb + "," + (0.9 * (1 - k / d.n)).toFixed(3) + ")";
+        ctx.fillText(glyph(d.s + (head - k) * 7 + (k === 0 || (k * 13 + i) % 11 === 0 ? flick : 0)), i * fs, y);
       }
-      if ((head - col.n) * fs > H) { col.y = -Math.random() * 12; col.n = 12 + (Math.random() * 22 | 0); col.v = 0.15 + Math.random() * 0.35; }
+      if ((head - d.n) * fs > H) cols[i][j] = drop(true);
     }
   }
   var raf = 0, still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function loop() { for (var i = 0; i < cols.length; i++) cols[i].y += cols[i].v; frame(); raf = requestAnimationFrame(loop); }
+  function loop() { for (var i = 0; i < cols.length; i++) { cols[i][0].y += cols[i][0].v; cols[i][1].y += cols[i][1].v; } frame(); raf = requestAnimationFrame(loop); }
   readColors(); size();
   new MutationObserver(function () { readColors(); if (still) frame(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   addEventListener("resize", function () { size(); if (still) frame(); });
