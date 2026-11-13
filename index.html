@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-hN33UsedtdOqLHVDvfPNTGSU2mPY8tuA6Adtt0UqKyU=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-XLaXu6qXodHFDMq71bWCGjg28XEa+2UfeGHVA/opp1s=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -176,6 +176,12 @@
   .downloads { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
   .dl { font: 16px var(--serif); }
   .dl small { color: var(--soft); }
+  .arc { margin-top: 18px; }
+  .btn95 { font: 12px var(--mono); text-transform: uppercase; letter-spacing: .08em; background: #c0c0c0; color: #000; padding: 5px 12px;
+           cursor: pointer; border: 2px solid; border-color: #fff #404040 #404040 #fff; border-radius: 0; }
+  .btn95:active { border-color: #404040 #fff #fff #404040; }
+  .btn95:disabled { color: #808080; cursor: default; }
+  .arc .hint { margin-top: 6px; }
 
   footer { margin-top: 34px; font: 12px var(--serif); color: var(--soft); }
   .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
@@ -232,6 +238,7 @@
     <li class="vidonly"><a href="#s2">Trim</a></li>
     <li><a href="#s3">Adjust the Look</a></li>
     <li><a href="#go">Generate</a></li>
+    <li><a href="archive/">Archive</a></li>
   </ul>
 
   <div class="phase" aria-label="Free" title="ONLINE-NOW.GIF"><span aria-hidden="true">FREE</span><span aria-hidden="true">ONLINE NOW</span></div>
@@ -310,6 +317,8 @@
       <h2><b id="resn">4.</b> <span id="restitle">Your Clip</span></h2>
       <div id="media"></div>
       <div class="downloads" id="downloads"></div>
+      <div class="arc" id="arc"><button class="btn95" id="arcbtn" type="button">Add to the Archive</button>
+        <p class="hint" id="arcmsg">Shown after review.</p></div>
       <p class="hint">Your media is now future-proof.</p>
       <p class="hint">Deleted from the server within an hour. <button class="linkbtn" id="again" type="button">Make another</button></p>
     </section>
@@ -325,8 +334,8 @@
     <p id="count" hidden>You are visitor No. <span class="counter" id="countn">000000</span></p>
     <p id="made" hidden>Videos rendered <span class="counter" id="madn">000000</span></p>
     <p id="madep" hidden>Images encoded <span class="counter" id="madpn">000000</span></p>
-    <p>Use your own clips, or ones you have the right to use.<br>Music from Pixabay.<br>Videos are never shared and are deleted within an hour.<br>Future-proof through December 31, 2999.</p>
-    <p><a href="privacy/">Privacy</a></p>
+    <p>Use your own clips, or ones you have the right to use.<br>Music from Pixabay.<br>Videos are deleted within an hour unless added to the Archive.<br>Future-proof through December 31, 2999.</p>
+    <p><a href="archive/">Archive</a> &middot; <a href="privacy/">Privacy</a></p>
   </footer>
 </div>
 
@@ -549,8 +558,38 @@
     show("result", true); $("go").disabled = false;
     resultShown = true; setHush(true);
     countMade(png ? "picture" : "video");
+    arcReset(j.id);
     $("result").scrollIntoView({ behavior: "smooth", block: "start" });
   }
+  /* the Archive: share this result; shown after review */
+  var arcJob = null;
+  function deviceId() {
+    var d = store.get("df-device");
+    if (!d || !/^[0-9a-f]{32}$/.test(d)) {
+      var b = new Uint8Array(16); crypto.getRandomValues(b);
+      d = Array.prototype.map.call(b, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+      store.set("df-device", d);
+    }
+    return d;
+  }
+  function arcReset(id) {
+    arcJob = id; $("arcbtn").hidden = false; $("arcbtn").disabled = false;
+    $("arcmsg").textContent = "Shown after review."; $("arcmsg").classList.remove("error");
+  }
+  $("arcbtn").addEventListener("click", function () {
+    if (!arcJob) return;
+    var btn = $("arcbtn"), msg = $("arcmsg");
+    btn.disabled = true; msg.classList.remove("error"); msg.textContent = "Sending.";
+    fetch(API + "/api/archive/submit", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ job: arcJob, device: deviceId() }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return [r.ok, d]; }); })
+      .then(function (x) {
+        if (x[0] && x[1].no) { btn.hidden = true; msg.textContent = "Sent. You are No. " + x[1].no + "."; }
+        else { btn.disabled = false; msg.classList.add("error"); msg.textContent = (x[1] && x[1].detail) || "Didn't send. Try again."; }
+      })
+      .catch(function () { btn.disabled = false; msg.classList.add("error"); msg.textContent = "Didn't send. Try again."; });
+  });
+  $("again").addEventListener("click", function () { arcJob = null; });
   $("again").addEventListener("click", function () { resultShown = false; setHush(false); show("result", false); window.scrollTo({ top: 0, behavior: "smooth" }); });
 
   /* music: starts quietly on the first tap or click (browsers block sound before that),

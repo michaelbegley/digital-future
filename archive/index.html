@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-0YsOnhfbla7bWv7Y0Ois+3tzN/xcRhxhzmEnpgczFfA='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src https://michbegl-digital-future.hf.space; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>THE ARCHIVE - DIGITAL FUTURE</title>
+<meta name="description" content="Videos and pictures encoded with DIGITAL FUTURE.">
+<meta property="og:title" content="THE ARCHIVE">
+<meta property="og:description" content="Encoded with digital technology.">
+<meta property="og:url" content="https://digitalfuture.technology/archive/">
+<meta property="og:image" content="https://digitalfuture.technology/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M9 7v18M16 11v14M23 7v12' stroke='%2333ff33' stroke-width='3'/%3E%3C/svg%3E">
+<script src="../config.js"></script>
+<style>
+  :root {
+    --page: #000; --text: #fff; --soft: #bdbdbd; --green: #33ff33; --link: #33ff33; --edge: #3a3a3a;
+    --serif: "Times New Roman", Times, Georgia, serif;
+    --caps: Copperplate, "Copperplate Gothic Light", "Copperplate Gothic", "Trebuchet MS", Verdana, sans-serif;
+    --mono: "Courier New", Courier, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #000; color: var(--text); }
+  body { font: 16px/1.35 var(--serif); -webkit-text-size-adjust: 100%; }
+  a { color: var(--link); }
+  [hidden] { display: none !important; }
+  .page { width: min(980px, 100% - 24px); margin: 0 auto; padding: 26px 0 40px; text-align: center; }
+  .logo { margin: 4px 0 6px; font: 400 clamp(30px, 8vw, 46px)/1 var(--serif); letter-spacing: .14em; padding-left: .14em; color: var(--green);
+          text-shadow: 0 0 6px rgba(51,255,51,.7); }
+  .logo a { color: inherit; text-decoration: none; }
+  .sub { margin: 0 0 18px; font: 11px var(--caps); letter-spacing: .2em; color: var(--green); text-transform: uppercase; }
+  .sort { display: flex; justify-content: center; gap: 16px; margin: 0 0 20px; }
+  .sort a { font: 15px var(--serif); color: var(--link); padding: 2px; }
+  .sort a[aria-current] { color: var(--text); text-decoration: none; }
+  .sort a[aria-current]::before { content: "["; color: var(--green); margin-right: 3px; }
+  .sort a[aria-current]::after { content: "]"; color: var(--green); margin-left: 3px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; text-align: left; }
+  @media (max-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 620px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+  .card { border: 1px solid var(--edge); background: #050505; min-width: 0; }
+  .card video { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; background: #000; cursor: pointer; }
+  .info { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 6px 7px; font: 12px var(--mono); color: var(--soft); }
+  .info .no { color: var(--green); white-space: nowrap; }
+  .info .age { flex: 1; white-space: nowrap; }
+  .vote { font: 12px var(--mono); background: #c0c0c0; color: #000; padding: 2px 6px; cursor: pointer; white-space: nowrap;
+          border: 2px solid; border-color: #fff #404040 #404040 #fff; border-radius: 0; }
+  .vote:active { border-color: #404040 #fff #fff #404040; }
+  .vote.on { background: #0a3a0a; color: var(--green); border-color: #404040 #1f7a1f #1f7a1f #404040; cursor: default; }
+  .rep { display: block; padding: 0 7px 6px; font: 11px var(--serif); text-align: right; }
+  .rep button { background: none; border: 0; padding: 0; font: inherit; color: #8c8c8c; text-decoration: underline; cursor: pointer; }
+  .rep button:disabled { text-decoration: none; cursor: default; }
+  .msg { font: 15px var(--serif); color: var(--soft); margin: 30px 0; }
+  .more { margin: 22px auto 0; font: 12px var(--mono); text-transform: uppercase; letter-spacing: .08em; background: #c0c0c0; color: #000;
+          padding: 5px 14px; cursor: pointer; border: 2px solid; border-color: #fff #404040 #404040 #fff; border-radius: 0; }
+  footer { margin-top: 34px; font: 12px var(--serif); color: var(--soft); }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 class="logo"><a href="/">DIGITAL FUTURE</a></h1>
+  <p class="sub">The Archive</p>
+  <nav class="sort" aria-label="Sort">
+    <a href="?sort=hot" data-sort="hot">Hot</a>
+    <a href="?sort=new" data-sort="new">New</a>
+    <a href="?sort=top" data-sort="top">Top</a>
+  </nav>
+  <div class="grid" id="grid"></div>
+  <p class="msg" id="msg">Loading.</p>
+  <button class="more" id="more" type="button" hidden>More</button>
+  <footer><a href="/">Make your own</a> &middot; <a href="/privacy/">Privacy</a></footer>
+</div>
+<script>
+(function () {
+  var API = (window.DF_API || "").replace(/\/$/, "");
+  var $ = function (id) { return document.getElementById(id); };
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  function deviceId() {
+    var d = store.get("df-device");
+    if (!d || !/^[0-9a-f]{32}$/.test(d)) {
+      var b = new Uint8Array(16); crypto.getRandomValues(b);
+      d = Array.prototype.map.call(b, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+      store.set("df-device", d);
+    }
+    return d;
+  }
+  var voted = []; try { voted = JSON.parse(store.get("df-voted") || "[]"); } catch (e) {}
+  function markVoted(id) { if (voted.indexOf(id) < 0) { voted.push(id); if (voted.length > 2000) voted.shift(); store.set("df-voted", JSON.stringify(voted)); } }
+  var sort = new URLSearchParams(location.search).get("sort");
+  if (["hot", "new", "top"].indexOf(sort) < 0) sort = "hot";
+  document.querySelectorAll(".sort a").forEach(function (a) { if (a.dataset.sort === sort) a.setAttribute("aria-current", "page"); });
+  var page = 0;
+
+  function age(iso) {
+    var s = (Date.now() - Date.parse(iso)) / 1000;
+    if (!(s >= 0)) return "";
+    if (s < 3600) return Math.max(1, Math.floor(s / 60)) + "m";
+    if (s < 86400) return Math.floor(s / 3600) + "h";
+    if (s < 86400 * 365) return Math.floor(s / 86400) + "d";
+    return Math.floor(s / (86400 * 365)) + "y";
+  }
+  function post(path, body) {
+    return fetch(API + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return [r.ok, d]; }); });
+  }
+
+  var seen = "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      var v = e.target;
+      if (e.isIntersecting) { if (v.preload !== "auto") v.preload = "auto"; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+      else v.pause();
+    });
+  }, { threshold: 0.5 }) : null;
+
+  function card(it) {
+    var c = document.createElement("div"); c.className = "card";
+    var v = document.createElement("video");
+    v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "none";
+    v.poster = it.poster; v.src = it.video; v.title = "No. " + it.no;
+    v.addEventListener("click", function () { v.muted = !v.muted; if (v.paused) v.play(); });
+    c.appendChild(v);
+    var info = document.createElement("div"); info.className = "info";
+    var no = document.createElement("span"); no.className = "no"; no.textContent = "No. " + it.no;
+    var ag = document.createElement("span"); ag.className = "age"; ag.textContent = age(it.created);
+    var b = document.createElement("button"); b.type = "button"; b.className = "vote";
+    function setVotes(n, on) { b.textContent = "▲ " + n; if (on) { b.classList.add("on"); b.disabled = true; } }
+    setVotes(it.votes, voted.indexOf(it.id) >= 0);
+    b.addEventListener("click", function () {
+      b.disabled = true;
+      post("/api/archive/" + encodeURIComponent(it.id) + "/vote", { device: deviceId() }).then(function (x) {
+        if (x[0]) { markVoted(it.id); setVotes(typeof x[1].votes === "number" ? x[1].votes : it.votes, true); }
+        else b.disabled = false;
+      }).catch(function () { b.disabled = false; });
+    });
+    info.appendChild(no); info.appendChild(ag); info.appendChild(b);
+    c.appendChild(info);
+    var rp = document.createElement("span"); rp.className = "rep";
+    var rb = document.createElement("button"); rb.type = "button"; rb.textContent = "Report";
+    rb.addEventListener("click", function () {
+      rb.disabled = true; rb.textContent = "Reported";
+      post("/api/archive/" + encodeURIComponent(it.id) + "/report", { device: deviceId() }).catch(function () {});
+    });
+    rp.appendChild(rb); c.appendChild(rp);
+    if (seen) seen.observe(v);
+    return c;
+  }
+
+  function load() {
+    $("more").hidden = true;
+    fetch(API + "/api/archive?sort=" + sort + "&page=" + page)
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return [r.ok, d]; }); })
+      .then(function (x) {
+        var d = x[1] || {};
+        if (!x[0]) { if (!page) $("msg").textContent = d.detail || "The Archive is down right now."; return; }
+        var items = d.items || [];
+        items.forEach(function (it) { $("grid").appendChild(card(it)); });
+        if (!page) { $("msg").textContent = "Nothing here yet."; $("msg").hidden = items.length > 0; }
+        $("more").hidden = !d.more;
+      })
+      .catch(function () { if (!page) $("msg").textContent = "The Archive is down right now."; });
+  }
+  $("more").addEventListener("click", function () { page++; load(); });
+  load();
+})();
+</script>
+</body>
+</html>
