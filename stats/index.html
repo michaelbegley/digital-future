@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>DIGITAL FUTURE visits</title>
+<style>
+  body { margin: 0; background: #000; color: #fff; font: 16px/1.35 "Times New Roman", Times, serif; }
+  main { width: min(620px, 100% - 24px); margin: 0 auto; padding: 26px 0 40px; text-align: center; }
+  h1 { font: 400 clamp(28px, 7vw, 40px)/1 "Times New Roman", serif; letter-spacing: .14em; padding-left: .14em; color: #33ff33;
+       text-shadow: 0 0 6px rgba(51,255,51,.7); margin: 0 0 6px; }
+  h2 { font: 14px Copperplate, "Copperplate Gothic Light", "Trebuchet MS", sans-serif; font-variant: small-caps; letter-spacing: .18em; margin: 26px 0 10px; }
+  .soft { color: #bdbdbd; font-size: 13px; }
+  .tiles { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .tiles div { border: 1px solid #3a3a3a; padding: 10px 14px; min-width: 120px; }
+  .tiles b { display: block; font: 24px "Courier New", monospace; color: #ff3333; letter-spacing: .1em; }
+  .tiles span { font: 11px Copperplate, "Trebuchet MS", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #bdbdbd; }
+  ul { list-style: none; padding: 0; margin: 0 auto; max-width: 460px; text-align: left; }
+  li { display: grid; grid-template-columns: 140px 1fr 60px; gap: 8px; align-items: center; font-size: 14px; margin: 4px 0; }
+  li i { display: block; height: 10px; border: 1px solid #3a3a3a; }
+  li u { display: block; height: 100%; background: #33ff33; }
+  li span { text-align: right; font-family: "Courier New", monospace; color: #33ff33; }
+</style>
+</head>
+<body>
+<main>
+  <h1>DIGITAL FUTURE</h1>
+  <p class="soft" id="when">Loading.</p>
+  <div class="tiles">
+    <div><b id="now">0</b><span>Last 30 min</span></div>
+    <div><b id="today">0</b><span>Today</span></div>
+    <div><b id="all">0</b><span>All time</span></div>
+  </div>
+  <h2>Where from, last 30 days</h2>
+  <ul id="from"></ul>
+  <h2>Last 30 days</h2>
+  <ul id="days"></ul>
+  <p class="soft">One visit is one browser tab opening the site. Reloads aren't counted again, and neither are browsers that ask not to be tracked. Days are Central time. Tag links like ?from=tiktok to see where people came from.</p>
+</main>
+<script>
+(function () {
+  var STATS = "https://cpzhsztczixiidxypvmb.supabase.co/rest/v1/rpc/df_visit_stats",
+      KEY = "sb_publishable_M8UMcKf1BrHMbCuCVJ1P3g_-Bwnwd2W";
+  var NAMES = { x: "X", reddit: "Reddit", hn: "Hacker News", google: "Google", search: "Other search", ai: "AI assistants",
+    facebook: "Facebook", instagram: "Instagram", threads: "Threads", tiktok: "TikTok", youtube: "YouTube", linkedin: "LinkedIn",
+    bluesky: "Bluesky", discord: "Discord", github: "GitHub", text: "Text message", email: "Email", other: "Other sites", direct: "Direct" };
+  function $(id) { return document.getElementById(id); }
+  function num(n) { return Number(n).toLocaleString("en-US"); }
+  function row(label, visits, most) {
+    var li = document.createElement("li"), b = document.createElement("b"), i = document.createElement("i"),
+        u = document.createElement("u"), s = document.createElement("span");
+    b.textContent = label; u.style.width = Math.max(2, visits / most * 100) + "%"; s.textContent = num(visits);
+    i.appendChild(u); li.appendChild(b); li.appendChild(i); li.appendChild(s); return li;
+  }
+  function load() {
+    fetch(STATS, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: "{}" })
+      .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.message || r.status); return d; }); })
+      .then(function (d) {
+        $("now").textContent = num(d.last_30_min); $("today").textContent = num(d.today); $("all").textContent = num(d.all_time);
+        var src = d.sources || [], top = Math.max.apply(null, [1].concat(src.map(function (x) { return x.visits; })));
+        $("from").replaceChildren.apply($("from"), src.map(function (x) { return row(NAMES[x.src] || x.src, x.visits, top); }));
+        var days = d.days || [], most = Math.max.apply(null, [1].concat(days.map(function (x) { return x.visits; })));
+        $("days").replaceChildren.apply($("days"), days.map(function (x) {
+          return row(new Date(x.day + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }), x.visits, most);
+        }));
+        $("when").textContent = "Updated " + new Date().toLocaleTimeString("en-US") + ". Refreshes every minute.";
+      })
+      .catch(function (e) { $("when").textContent = "Couldn't load the numbers. " + e.message; });
+  }
+  load(); setInterval(load, 60000);
+})();
+</script>
+</body>
+</html>
