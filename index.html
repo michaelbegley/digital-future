@@ -151,6 +151,13 @@
   .opt .name { display: block; font: 12px var(--caps); letter-spacing: .18em; text-transform: uppercase; color: var(--text); }
   .opt .desc { display: block; font: 12px var(--serif); color: var(--soft); font-style: italic; }
   body:not([data-mode="image"]) .picsonly { display: none; }
+  /* 1999 "New!" badge next to the Archive link: red, italic, blinks like <blink> did */
+  .newbadge { color: #ff2020; font: italic bold 0.85em "Times New Roman", serif; letter-spacing: 0; text-transform: none;
+              text-shadow: 1px 1px 0 #600; animation: blink 1s steps(1, end) infinite; }
+  @keyframes blink { 50% { visibility: hidden; } }
+  .menu .arclink a { position: relative; }   /* Archive stays lined up with the other menu items; the badge hangs off its left */
+  .menu .arclink .newbadge { position: absolute; right: 100%; margin-right: 8px; white-space: nowrap; }
+  @media (prefers-reduced-motion: reduce) { .newbadge { animation: none; } }
   .seg { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
   .seg input { position: absolute; opacity: 0; pointer-events: none; }
   .seg label { font: 15px var(--serif); color: var(--link); text-decoration: underline; cursor: pointer; padding: 2px; }
@@ -257,7 +264,7 @@
     <li class="vidonly"><a href="#s2">Trim</a></li>
     <li><a href="#s3">Adjust the Look</a></li>
     <li><a href="#go">Generate</a></li>
-    <li class="arclink" hidden><a href="archive/">Archive</a></li>
+    <li class="arclink" hidden><a href="archive/"><span class="newbadge" aria-hidden="true">New!</span>Archive</a></li>
   </ul>
 
   <div class="phase" aria-label="Free" title="ONLINE-NOW.GIF"><span aria-hidden="true">FREE</span><span aria-hidden="true">ONLINE NOW</span></div>
@@ -369,7 +376,7 @@
     <p id="made" hidden>Videos rendered <span class="counter" id="madn">000000</span></p>
     <p id="madep" hidden>Images encoded <span class="counter" id="madpn">000000</span></p>
     <p>Use your own clips, or ones you have the right to use.<br>Music from Pixabay.<br><span id="delnote">Videos are never shared and are deleted within an hour.</span><br>Future-proof through December 31, 2999.</p>
-    <p><span class="arclink" hidden><a href="archive/">Archive</a> &middot; </span><a href="privacy/">Privacy</a></p>
+    <p><span class="arclink" hidden><span class="newbadge" aria-hidden="true">New!</span> <a href="archive/">Archive</a> &middot; </span><a href="privacy/">Privacy</a></p>
   </footer>
 </div>
 
