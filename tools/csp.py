@@ -29,7 +29,7 @@ for page, extra in PAGES.items():
     if "adsbygoogle.js" in s:
         beacon += " " + ADS
     policy = (f"default-src 'none'; script-src 'self' {hashes}{beacon}; style-src 'self' 'unsafe-inline'; {extra}; "
-              "base-uri 'none'; form-action 'none'; object-src 'none'")
+              "manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'")
     tags = f'<meta http-equiv="Content-Security-Policy" content="{policy}">\n<meta name="referrer" content="strict-origin-when-cross-origin">'
     s = s.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n' + tags, 1)
     open(path, "w").write(s)
