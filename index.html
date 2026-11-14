@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-XLaXu6qXodHFDMq71bWCGjg28XEa+2UfeGHVA/opp1s=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-xJo6djDCgBVfgjH8ZJm7+HtM+b+wS0h652L0c6e+k0U=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -176,12 +176,25 @@
   .downloads { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
   .dl { font: 16px var(--serif); }
   .dl small { color: var(--soft); }
-  .arc { margin-top: 18px; }
+  .arc { margin-top: 14px; }
   .btn95 { font: 12px var(--mono); text-transform: uppercase; letter-spacing: .08em; background: #c0c0c0; color: #000; padding: 5px 12px;
            cursor: pointer; border: 2px solid; border-color: #fff #404040 #404040 #fff; border-radius: 0; }
   .btn95:active { border-color: #404040 #fff #fff #404040; }
   .btn95:disabled { color: #808080; cursor: default; }
   .arc .hint { margin-top: 6px; }
+  .sharerow { margin-top: 14px; }
+  .sharebox { position: fixed; z-index: 20; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(320px, 100% - 24px);
+              background: #c0c0c0; color: #000; border: 2px solid; border-color: #fff #404040 #404040 #fff; text-align: left;
+              box-shadow: 4px 4px 0 rgba(0,0,0,.6); }
+  .sharebox .tb { display: flex; align-items: center; justify-content: space-between; background: #000080; color: #fff;
+                  font: 700 12px var(--mono); padding: 3px 3px 3px 7px; }
+  .sharebox .x { font: 700 12px/1 var(--mono); width: 20px; height: 18px; padding: 0; background: #c0c0c0; color: #000; cursor: pointer;
+                 border: 2px solid; border-color: #fff #404040 #404040 #fff; border-radius: 0; }
+  .sharebox ul { list-style: none; margin: 0; padding: 12px 14px 4px; }
+  .sharebox li { margin: 0 0 9px; }
+  .sharebox a, .sharebox a:visited, .sharebox .copy { color: #0000ee; font: 16px var(--serif); text-decoration: underline;
+                  background: none; border: 0; padding: 0; cursor: pointer; }
+  .sharebox p { margin: 0; padding: 4px 14px 12px; font: 12px var(--serif); color: #303030; }
 
   footer { margin-top: 34px; font: 12px var(--serif); color: var(--soft); }
   .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
@@ -317,6 +330,18 @@
       <h2><b id="resn">4.</b> <span id="restitle">Your Clip</span></h2>
       <div id="media"></div>
       <div class="downloads" id="downloads"></div>
+      <div class="sharerow"><button class="btn95" id="sharebtn" type="button" aria-haspopup="dialog">Share</button></div>
+      <div class="sharebox" id="sharebox" role="dialog" aria-modal="true" aria-labelledby="sharetitle" hidden>
+        <div class="tb"><span id="sharetitle">Share</span><button class="x" id="shareclose" type="button" aria-label="Close">&times;</button></div>
+        <ul>
+          <li><a id="sh-x" target="_blank" rel="noopener">X</a></li>
+          <li><a id="sh-reddit" target="_blank" rel="noopener">Reddit</a></li>
+          <li><a id="sh-facebook" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a id="sh-bluesky" target="_blank" rel="noopener">Bluesky</a></li>
+          <li><button class="copy" id="sh-copy" type="button">Copy link</button></li>
+        </ul>
+        <p>For TikTok or Instagram, download it and post from your phone.</p>
+      </div>
       <div class="arc" id="arc"><button class="btn95" id="arcbtn" type="button">Add to the Archive</button>
         <p class="hint" id="arcmsg">Shown after review.</p></div>
       <p class="hint">Your media is now future-proof.</p>
@@ -527,7 +552,7 @@
   var SHARE_FILES = !!(navigator.canShare && navigator.share) && matchMedia("(hover: none) and (pointer: coarse)").matches;
   function done(j) {
     clearInterval(timer); setStage("Done", "", 1); show("status", false);
-    var media = $("media"), dls = $("downloads"); media.innerHTML = ""; dls.innerHTML = "";
+    var media = $("media"), dls = $("downloads"); media.innerHTML = ""; dls.innerHTML = ""; shareFiles = {}; shareOrder = [];
     var vid = j.files.filter(function (f) { return /\.mp4$/.test(f.name); })[0];
     var gif = j.files.filter(function (f) { return /\.gif$/.test(f.name); })[0];
     var png = j.files.filter(function (f) { return /\.png$/.test(f.name); })[0];
@@ -535,6 +560,7 @@
     else if (vid) { var v = document.createElement("video"); v.src = FILES + vid.url; v.controls = true; v.playsInline = true; v.loop = true;
                if (j.poster) v.poster = FILES + "/api/files/" + j.id + "/" + j.poster; media.appendChild(v); }
     else if (gif) { var im = document.createElement("img"); im.src = FILES + gif.url; im.alt = "Your generated GIF"; media.appendChild(im); }
+    shareOrder = [vid, gif, png].filter(Boolean).map(function (f) { return f.name; });
     j.files.forEach(function (f, i) {
       var a = document.createElement("a"); a.href = FILES + f.url; a.download = f.name; a.className = "dl" + (i ? " alt" : "");
       a.innerHTML = "Download " + (/\.gif$/.test(f.name) ? "GIF" : /\.png$/.test(f.name) ? "picture" : "video") + " <small>(" + f.mb + " MB)</small>";
@@ -546,7 +572,7 @@
         fetch(FILES + f.url).then(function (r) { return r.blob(); }).then(function (b) {
           var type = /\.mp4$/.test(f.name) ? "video/mp4" : /\.gif$/.test(f.name) ? "image/gif" : "image/png";
           var fl = new File([b], f.name, { type: type });
-          if (navigator.canShare({ files: [fl] })) file = fl;
+          if (navigator.canShare({ files: [fl] })) { file = fl; shareFiles[f.name] = fl; }
         }).catch(function () {});
         a.addEventListener("click", function (e) {
           if (!file) return;                       // not fetched yet or can't share: normal download
@@ -561,6 +587,40 @@
     arcReset(j.id);
     $("result").scrollIntoView({ behavior: "smooth", block: "start" });
   }
+  /* Share: phones get the share sheet with the file; computers get links */
+  var SITE = "https://digitalfuture.technology/", SHARE_TEXT = "Encode your media with digital technology.";
+  var shareFiles = {}, shareOrder = [];
+  function tagged(from) { return SITE + "?from=" + from; }
+  function enc(x) { return encodeURIComponent(x); }
+  $("sh-x").href = "https://x.com/intent/post?text=" + enc(SHARE_TEXT) + "&url=" + enc(tagged("x"));
+  $("sh-reddit").href = "https://www.reddit.com/submit?url=" + enc(tagged("reddit")) + "&title=" + enc(SHARE_TEXT);
+  $("sh-facebook").href = "https://www.facebook.com/sharer/sharer.php?u=" + enc(tagged("facebook"));
+  $("sh-bluesky").href = "https://bsky.app/intent/compose?text=" + enc(SHARE_TEXT + " " + tagged("bluesky"));
+  function closeShare() { if ($("sharebox").hidden) return; $("sharebox").hidden = true; $("sharebtn").focus(); }
+  $("sharebtn").addEventListener("click", function () {
+    if (SHARE_FILES) {
+      var fl = null;
+      shareOrder.some(function (n) { return (fl = shareFiles[n] || null); });
+      var data = fl ? { files: [fl], text: "digitalfuture.technology" } : { text: SHARE_TEXT, url: SITE };
+      navigator.share(data).catch(function () {});
+      return;
+    }
+    $("sh-copy").textContent = "Copy link";
+    $("sharebox").hidden = false; $("sh-x").focus();
+  });
+  $("shareclose").addEventListener("click", closeShare);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeShare(); });
+  document.addEventListener("click", function (e) {
+    if (!$("sharebox").hidden && !$("sharebox").contains(e.target) && e.target !== $("sharebtn")) closeShare();
+  });
+  $("sh-copy").addEventListener("click", function () {
+    var u = tagged("copy"), b = $("sh-copy");
+    function ok() { b.textContent = "Copied"; }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(ok, function () { b.textContent = u; });
+    else b.textContent = u;
+  });
+  $("again").addEventListener("click", function () { closeShare(); });
+
   /* the Archive: share this result; shown after review */
   var arcJob = null;
   function deviceId() {
