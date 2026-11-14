@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-zOz96E06T2tyVfFDaViOb91DRQRu6sPPYjk9jdD7tNI=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-5s82+oviXSnNXpPHSU/U1BIh6j0c5k1anW/F2oPhm/s=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -182,6 +182,8 @@
   .btn95:active { border-color: #404040 #fff #fff #404040; }
   .btn95:disabled { color: #808080; cursor: default; }
   .arc .hint { margin-top: 6px; }
+  .arcok { display: block; cursor: pointer; }
+  .arcok input { vertical-align: -2px; margin: 0 4px 0 0; }
   .sharerow { margin-top: 14px; }
   .sharebox { position: fixed; z-index: 20; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(320px, 100% - 24px);
               background: #c0c0c0; color: #000; border: 2px solid; border-color: #fff #404040 #404040 #fff; text-align: left;
@@ -343,7 +345,8 @@
         <p>For TikTok or Instagram, download it and post from your phone.</p>
       </div>
       <div class="arc" id="arc"><button class="btn95" id="arcbtn" type="button">Add to the Archive</button>
-        <p class="hint" id="arcmsg">Shown after review.</p></div>
+        <label class="hint arcok" id="arcok"><input type="checkbox" id="arcagree"> It's mine to share and everyone in it is OK with it.</label>
+        <p class="hint" id="arcmsg">Checked for nudity, violence and hate, then reviewed. Only the green version is shown.</p></div>
       <p class="hint">Your media is now future-proof.</p>
       <p class="hint">Deleted from the server within an hour. <button class="linkbtn" id="again" type="button">Make another</button></p>
     </section>
@@ -633,18 +636,20 @@
     return d;
   }
   function arcReset(id) {
-    arcJob = id; $("arcbtn").hidden = false; $("arcbtn").disabled = false;
-    $("arcmsg").textContent = "Shown after review."; $("arcmsg").classList.remove("error");
+    arcJob = id; $("arcbtn").hidden = false; $("arcbtn").disabled = false; $("arcok").hidden = false; $("arcagree").checked = false;
+    $("arcmsg").textContent = "Checked for nudity, violence and hate, then reviewed. Only the green version is shown.";
+    $("arcmsg").classList.remove("error");
   }
   $("arcbtn").addEventListener("click", function () {
     if (!arcJob) return;
     var btn = $("arcbtn"), msg = $("arcmsg");
+    if (!$("arcagree").checked) { msg.classList.add("error"); msg.textContent = "Tick the box first."; return; }
     btn.disabled = true; msg.classList.remove("error"); msg.textContent = "Sending.";
     fetch(API + "/api/archive/submit", { method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ job: arcJob, device: deviceId() }) })
+      body: JSON.stringify({ job: arcJob, device: deviceId(), agree: true }) })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return [r.ok, d]; }); })
       .then(function (x) {
-        if (x[0] && x[1].no) { btn.hidden = true; msg.textContent = "Sent. You are No. " + x[1].no + "."; }
+        if (x[0] && x[1].no) { btn.hidden = true; $("arcok").hidden = true; msg.textContent = "Sent. You are No. " + x[1].no + "."; }
         else { btn.disabled = false; msg.classList.add("error"); msg.textContent = (x[1] && x[1].detail) || "Didn't send. Try again."; }
       })
       .catch(function () { btn.disabled = false; msg.classList.add("error"); msg.textContent = "Didn't send. Try again."; });

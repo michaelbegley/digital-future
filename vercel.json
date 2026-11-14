@@ -29,12 +29,29 @@
           "value": "same-origin-allow-popups"
         }
       ]
+    },
+    {
+      "source": "/archive-files/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "public, max-age=300"
+        }
+      ]
     }
   ],
   "rewrites": [
     {
       "source": "/api/files/:path*",
       "destination": "https://michbegl-digital-future.hf.space/api/files/:path*"
+    },
+    {
+      "source": "/archive-files/:path*",
+      "destination": "https://cpzhsztczixiidxypvmb.supabase.co/storage/v1/object/public/archive/:path*"
     }
   ]
 }

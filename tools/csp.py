@@ -13,6 +13,7 @@ PAGES = {
     "index.html": f"img-src 'self' data: blob: {API} {ADS}; media-src 'self' blob: {API}; connect-src 'self' {API} {COUNTER} {BEACON_POST} {ADS}; frame-src {ADS}",
     "privacy/index.html": "img-src 'self'",
     "stats/index.html": f"img-src 'self' data:; connect-src {COUNTER} {API}",
+    "removal/index.html": "img-src 'self'",
     "archive/index.html": f"img-src 'self' data:; media-src 'self'; connect-src {API}",
 }
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
