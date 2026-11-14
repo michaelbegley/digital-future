@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-RxIjUxywWScDnpAq7aT9Gtg82BV6zas1/K1wx/wJ0gc=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-H5rYSBV2CzmIR11taoFJXXX+MlEEUIAoL7mpDrlx2u0=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -210,6 +210,7 @@
   .sharebox p { margin: 0; padding: 4px 14px 12px; font: 12px var(--serif); color: #303030; }
 
   footer { margin-top: 34px; font: 12px var(--serif); color: var(--soft); }
+  footer .footlinks { margin: 27px 0 -3px; }   /* Privacy sits halfway between the last line of text and the bottom of the page */
   .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
   @media (max-width: 480px) { .badges { max-width: 184px; margin-left: auto; margin-right: auto; } }   /* 2 x 2 on phones, not 3 + 1 */
   .badge { width: 88px; height: 31px; display: flex; flex-direction: column; justify-content: center; font: 8px/1.15 var(--mono);
@@ -320,7 +321,7 @@
         <div class="opt picsonly"><span class="name">Look</span>
           <div class="seg" role="radiogroup" aria-label="Look" data-name="look" data-options="classic:Classic,hologram:Hologram"></div></div>
         <div class="opt"><span class="name">Subject</span>
-          <div class="seg" role="radiogroup" aria-label="Subject" data-name="subject" data-options="auto:Auto,person:Person,being:Being,object:Object"></div></div>
+          <div class="seg" role="radiogroup" aria-label="Subject" data-name="subject" data-options="auto:Auto,person:Person,animal:Animal,object:Object"></div></div>
         <div class="opt"><span class="name">Rain</span>
           <div class="seg" role="radiogroup" aria-label="Rain" data-name="rain" data-options="light:Light,medium:Medium,heavy:Heavy"></div></div>
         <div class="opt"><span class="name">Background</span>
@@ -375,8 +376,8 @@
     <p id="count" hidden>You are visitor No. <span class="counter" id="countn">000000</span></p>
     <p id="made" hidden>Videos rendered <span class="counter" id="madn">000000</span></p>
     <p id="madep" hidden>Images encoded <span class="counter" id="madpn">000000</span></p>
-    <p>Use your own clips, or ones you have the right to use.<br>Music from Pixabay.<br><span id="delnote">Videos are never shared and are deleted within an hour.</span><br>Future-proof through December 31, 2999.</p>
-    <p><span class="arclink" hidden><span class="newbadge" aria-hidden="true">New!</span> <a href="archive/">Archive</a> &middot; </span><a href="privacy/">Privacy</a></p>
+    <p>Use your own clips, or ones you have the right to use.<br><span id="delnote">Videos are never shared and are deleted within an hour.</span><br>Future-proof through December 31, 2999.<br>Music from Pixabay.</p>
+    <p class="footlinks"><span class="arclink" hidden><span class="newbadge" aria-hidden="true">New!</span> <a href="archive/">Archive</a> &middot; </span><a href="privacy/">Privacy</a></p>
   </footer>
 </div>
 
@@ -536,7 +537,7 @@
     persist();
     var o = options(), fd = new FormData();
     fd.append("file", file); fd.append("start", $("start").value); fd.append("end", $("end").value);
-    Object.keys(o).forEach(function (k) { fd.append(k, k === "subject" && o[k] === "being" ? "object" : o[k]); });   // pets and other beings use the general cutout
+    Object.keys(o).forEach(function (k) { fd.append(k, k === "subject" && o[k] === "animal" ? "object" : o[k]); });   // pets and other beings use the general cutout
     $("go").disabled = true; $("stage").classList.remove("error");
     show("result", false); show("status", true); setStage("Uploading", "Keep this page open.", 0);
     t0 = Date.now(); clearInterval(timer); timer = setInterval(tick, 1000); tick();
