@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-mSMRo0YFxew+lhA/oCcmZwBYWlgZCSKt2ZFq/fqZ2pg='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src https://michbegl-digital-future.hf.space; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-K4SzTYGZVXKpUpJ1V8MZSRAt/T3mlNmuQ0lpLmjCT6Y='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src https://michbegl-digital-future.hf.space; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>THE ARCHIVE - DIGITAL FUTURE</title>
-<meta name="description" content="Videos and pictures encoded with DIGITAL FUTURE.">
+<meta name="description" content="Videos and images encoded with DIGITAL FUTURE.">
 <meta property="og:title" content="THE ARCHIVE">
 <meta property="og:description" content="Encoded with digital technology.">
 <meta property="og:url" content="https://digitalfuture.technology/archive/">
@@ -75,7 +75,7 @@
   <nav class="sort kinds" aria-label="Show">
     <a href="?kind=all" data-kind="all">All</a>
     <a href="?kind=video" data-kind="video">Videos</a>
-    <a href="?kind=picture" data-kind="picture">Pictures</a>
+    <a href="?kind=picture" data-kind="picture">Images</a>
   </nav>
   <div class="grid" id="grid"></div>
   <p class="msg" id="msg">Loading.</p>
@@ -153,7 +153,7 @@
       }).catch(function () { b.disabled = false; });
     });
     info.appendChild(no);
-    if (it.kind === "picture") { var tg = document.createElement("span"); tg.className = "tag"; tg.textContent = "PICTURE"; info.appendChild(tg); }
+    if (it.kind === "picture") { var tg = document.createElement("span"); tg.className = "tag"; tg.textContent = "IMAGE"; info.appendChild(tg); }
     info.appendChild(ag); info.appendChild(b);
     c.appendChild(info);
     var rp = document.createElement("span"); rp.className = "rep";
