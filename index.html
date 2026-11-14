@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-5s82+oviXSnNXpPHSU/U1BIh6j0c5k1anW/F2oPhm/s=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-3pnzwRJnR7AzrpUkBr96x+jdJO0kKARU0lJ5rvlSH2A=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -253,7 +253,7 @@
     <li class="vidonly"><a href="#s2">Trim</a></li>
     <li><a href="#s3">Adjust the Look</a></li>
     <li><a href="#go">Generate</a></li>
-    <li><a href="archive/">Archive</a></li>
+    <li class="arclink" hidden><a href="archive/">Archive</a></li>
   </ul>
 
   <div class="phase" aria-label="Free" title="ONLINE-NOW.GIF"><span aria-hidden="true">FREE</span><span aria-hidden="true">ONLINE NOW</span></div>
@@ -344,7 +344,7 @@
         </ul>
         <p>For TikTok or Instagram, download it and post from your phone.</p>
       </div>
-      <div class="arc" id="arc"><button class="btn95" id="arcbtn" type="button">Add to the Archive</button>
+      <div class="arc" id="arc" hidden><button class="btn95" id="arcbtn" type="button">Add to the Archive</button>
         <label class="hint arcok" id="arcok"><input type="checkbox" id="arcagree"> It's mine to share and everyone in it is OK with it.</label>
         <p class="hint" id="arcmsg">Checked for nudity, violence and hate, then reviewed. Only the green version is shown.</p></div>
       <p class="hint">Your media is now future-proof.</p>
@@ -362,8 +362,8 @@
     <p id="count" hidden>You are visitor No. <span class="counter" id="countn">000000</span></p>
     <p id="made" hidden>Videos rendered <span class="counter" id="madn">000000</span></p>
     <p id="madep" hidden>Images encoded <span class="counter" id="madpn">000000</span></p>
-    <p>Use your own clips, or ones you have the right to use.<br>Music from Pixabay.<br>Videos are deleted within an hour unless added to the Archive.<br>Future-proof through December 31, 2999.</p>
-    <p><a href="archive/">Archive</a> &middot; <a href="privacy/">Privacy</a></p>
+    <p>Use your own clips, or ones you have the right to use.<br>Music from Pixabay.<br><span id="delnote">Videos are never shared and are deleted within an hour.</span><br>Future-proof through December 31, 2999.</p>
+    <p><span class="arclink" hidden><a href="archive/">Archive</a> &middot; </span><a href="privacy/">Privacy</a></p>
   </footer>
 </div>
 
@@ -636,6 +636,7 @@
     return d;
   }
   function arcReset(id) {
+    $("arc").hidden = !archiveOpen;
     arcJob = id; $("arcbtn").hidden = false; $("arcbtn").disabled = false; $("arcok").hidden = false; $("arcagree").checked = false;
     $("arcmsg").textContent = "Checked for nudity, violence and hate, then reviewed. Only the green version is shown.";
     $("arcmsg").classList.remove("error");
@@ -737,6 +738,15 @@
   video.addEventListener("pause", function () { if (!resultShown) setHush(false); });
   var resultShown = false;
   musicUpdate();
+
+  /* the Archive shows up on its own once the server has it open */
+  var archiveOpen = false;
+  fetch(API + "/api/archive?sort=new&page=0").then(function (r) {
+    if (!r.ok) return;
+    archiveOpen = true;
+    document.querySelectorAll(".arclink").forEach(function (e) { e.hidden = false; });
+    $("delnote").textContent = "Videos are deleted within an hour unless added to the Archive.";
+  }).catch(function () {});
 
   /* visit counter: one anonymous count per tab. Only a number per 10-minute slot and a
      daily count per source group (x, reddit, tiktok...) are kept. No address, no id,
