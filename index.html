@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-xJo6djDCgBVfgjH8ZJm7+HtM+b+wS0h652L0c6e+k0U=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-zOz96E06T2tyVfFDaViOb91DRQRu6sPPYjk9jdD7tNI=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -334,7 +334,7 @@
       <div class="sharebox" id="sharebox" role="dialog" aria-modal="true" aria-labelledby="sharetitle" hidden>
         <div class="tb"><span id="sharetitle">Share</span><button class="x" id="shareclose" type="button" aria-label="Close">&times;</button></div>
         <ul>
-          <li><a id="sh-x" target="_blank" rel="noopener">X</a></li>
+          <li><a id="sh-x" target="_blank" rel="noopener">Twitter</a></li>
           <li><a id="sh-reddit" target="_blank" rel="noopener">Reddit</a></li>
           <li><a id="sh-facebook" target="_blank" rel="noopener">Facebook</a></li>
           <li><a id="sh-bluesky" target="_blank" rel="noopener">Bluesky</a></li>
@@ -592,7 +592,7 @@
   var shareFiles = {}, shareOrder = [];
   function tagged(from) { return SITE + "?from=" + from; }
   function enc(x) { return encodeURIComponent(x); }
-  $("sh-x").href = "https://x.com/intent/post?text=" + enc(SHARE_TEXT) + "&url=" + enc(tagged("x"));
+  $("sh-x").href = "https://twitter.com/intent/tweet?text=" + enc(SHARE_TEXT) + "&url=" + enc(tagged("x"));
   $("sh-reddit").href = "https://www.reddit.com/submit?url=" + enc(tagged("reddit")) + "&title=" + enc(SHARE_TEXT);
   $("sh-facebook").href = "https://www.facebook.com/sharer/sharer.php?u=" + enc(tagged("facebook"));
   $("sh-bluesky").href = "https://bsky.app/intent/compose?text=" + enc(SHARE_TEXT + " " + tagged("bluesky"));
