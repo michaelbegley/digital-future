@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-3pnzwRJnR7AzrpUkBr96x+jdJO0kKARU0lJ5rvlSH2A=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-gVLUeNR6MT9CrZ9r4V48Wtj4gnONIh/NWk+EADSdTmU=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -147,6 +147,7 @@
   .opts { display: grid; gap: 12px; max-width: 420px; margin: -4px auto 0; }   /* Output sits evenly between the heading and its choices */
   .opt .name { display: block; font: 12px var(--caps); letter-spacing: .18em; text-transform: uppercase; color: var(--text); }
   .opt .desc { display: block; font: 12px var(--serif); color: var(--soft); font-style: italic; }
+  body:not([data-mode="image"]) .picsonly { display: none; }
   .seg { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
   .seg input { position: absolute; opacity: 0; pointer-events: none; }
   .seg label { font: 15px var(--serif); color: var(--link); text-decoration: underline; cursor: pointer; padding: 2px; }
@@ -306,6 +307,8 @@
           <div class="seg" role="radiogroup" aria-label="Output" data-name="output" data-options="mp4:Video,gif:GIF,both:Both"></div></div>
         <div class="opt vidonly"><span class="name">Voice</span>
           <div class="seg" role="radiogroup" aria-label="Voice" data-name="voice" data-options="toy:Futuristic,none:Original"></div></div>
+        <div class="opt picsonly"><span class="name">Look</span>
+          <div class="seg" role="radiogroup" aria-label="Look" data-name="look" data-options="classic:Classic,hologram:Hologram"></div></div>
         <div class="opt"><span class="name">Subject</span>
           <div class="seg" role="radiogroup" aria-label="Subject" data-name="subject" data-options="auto:Auto,person:Person,being:Being,object:Object"></div></div>
         <div class="opt"><span class="name">Rain</span>
@@ -378,7 +381,7 @@
   // "View" show digitalfuture.technology, never the video server's address
   var FILES = /(^|\.)digitalfuture\.technology$|\.vercel\.app$/.test(location.hostname) ? "" : API;
   var MAX = 60, $ = function (id) { return document.getElementById(id); };
-  var DEFAULTS = { mode: "video", output: "mp4", voice: "toy", subject: "auto", rain: "medium", detail: "balanced", size: "720" };
+  var DEFAULTS = { mode: "video", output: "mp4", voice: "toy", subject: "auto", rain: "medium", detail: "balanced", size: "720", look: "classic" };
   var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
                 set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
                 del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
