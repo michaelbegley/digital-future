@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-xWmEcfWIiOEAMNZK3bk3ILdUpfYAKStouiu66kfSVwA=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-QbNPvecOgzm8JOCteT75hZ6nbvAWbvnccF2k0Na2/+Q=' 'sha256-sdW1y9pp6RVU5137RgHFrkHDOBUOiHIsS1FOCgL4JkQ=' 'sha256-oIMrZF2LGmW6nypoj4qKFvRhREZOxS8nYDaKyubjg1g=' 'sha256-hN33UsedtdOqLHVDvfPNTGSU2mPY8tuA6Adtt0UqKyU=' 'sha256-D1htLPfzsNMtnniEd24mBrBxrgeYW87qrzsqFNeHO7w=' https://static.cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://michbegl-digital-future.hf.space https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; media-src 'self' blob: https://michbegl-digital-future.hf.space; connect-src 'self' https://michbegl-digital-future.hf.space https://cpzhsztczixiidxypvmb.supabase.co https://cloudflareinsights.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googletagservices.com https://*.adtrafficquality.google https://*.googleadservices.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DIGITAL FUTURE</title>
@@ -285,7 +285,7 @@
         <div class="opt vidonly"><span class="name">Voice</span>
           <div class="seg" role="radiogroup" aria-label="Voice" data-name="voice" data-options="toy:Futuristic,none:Original"></div></div>
         <div class="opt"><span class="name">Subject</span>
-          <div class="seg" role="radiogroup" aria-label="Subject" data-name="subject" data-options="auto:Auto,person:Person,object:Object"></div></div>
+          <div class="seg" role="radiogroup" aria-label="Subject" data-name="subject" data-options="auto:Auto,person:Person,being:Being,object:Object"></div></div>
         <div class="opt"><span class="name">Rain</span>
           <div class="seg" role="radiogroup" aria-label="Rain" data-name="rain" data-options="light:Light,medium:Medium,heavy:Heavy"></div></div>
         <div class="opt"><span class="name">Background</span>
@@ -486,7 +486,7 @@
     persist();
     var o = options(), fd = new FormData();
     fd.append("file", file); fd.append("start", $("start").value); fd.append("end", $("end").value);
-    Object.keys(o).forEach(function (k) { fd.append(k, o[k]); });
+    Object.keys(o).forEach(function (k) { fd.append(k, k === "subject" && o[k] === "being" ? "object" : o[k]); });   // pets and other beings use the general cutout
     $("go").disabled = true; $("stage").classList.remove("error");
     show("result", false); show("status", true); setStage("Uploading", "Keep this page open.", 0);
     t0 = Date.now(); clearInterval(timer); timer = setInterval(tick, 1000); tick();
